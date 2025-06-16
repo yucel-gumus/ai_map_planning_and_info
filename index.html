@@ -1,0 +1,221 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Interaktif Harita Gezgini</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/index.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/genai": "https://esm.sh/@google/genai@^0.7.0"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <!-- Main container for the map and related UI elements -->
+    <div id="map-container" class="map-container">
+      <div id="map"></div>
+
+      <!-- Container for search elements positioned at the top -->
+      <div class="search-container">
+        <!-- Toggle switch for enabling/disabling Day Planner Mode -->
+        <div class="mode-toggle">
+          <label class="switch">
+            <input type="checkbox" id="planner-mode-toggle" />
+            <span class="slider round"></span>
+          </label>
+          <span class="mode-label">Günlük Planlayıcı Modu</span>
+        </div>
+
+        <div class="search-bar">
+          <i class="fas fa-search search-icon"></i>
+          <textarea
+            id="prompt-input"
+            placeholder="Yerler, tarih, etkinlikler veya rotalar keşfedin..."
+          ></textarea>
+          <button id="generate" class="search-button">
+            <i class="fas fa-arrow-right"></i>
+            <div class="spinner"></div>
+          </button>
+        </div>
+
+        <div class="error" id="error-message"></div>
+      </div>
+
+      <!-- Carousel for displaying location cards at the bottom -->
+      <div class="card-carousel">
+        <div class="card-container" id="card-container">
+          <!-- Location cards will be dynamically inserted here by the script -->
+        </div>
+        <div class="carousel-controls">
+          <button class="carousel-arrow prev" id="prev-card">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <div class="carousel-indicators" id="carousel-indicators">
+            <!-- Indicator dots will be added dynamically -->
+          </div>
+          <button class="carousel-arrow next" id="next-card">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Button to reset the map and clear current results -->
+      <button id="reset" class="reset-button">
+        <i class="fas fa-undo"></i>
+      </button>
+
+      <!-- Help button -->
+      <button id="help-button" class="help-button">
+        <i class="fas fa-question"></i>
+      </button>
+    </div>
+
+    <!-- Semi-transparent overlay displayed when timeline is open on mobile -->
+    <div class="map-overlay" id="map-overlay"></div>
+    
+    <!-- Loading overlay with blur effect -->
+    <div class="loading-overlay" id="loading-overlay">
+      <div class="loading-spinner">
+        <div class="spinner-ring"></div>
+        <div class="loading-text">Aranıyor...</div>
+      </div>
+    </div>
+
+    <!-- Sliding panel for displaying the day plan timeline -->
+    <div class="timeline-container" id="timeline-container">
+      <!-- Button to toggle timeline visibility on mobile -->
+      <button id="timeline-toggle" class="timeline-toggle">
+        <i class="fas fa-calendar-alt"></i>
+      </button>
+
+      <div class="timeline-header">
+        <h3>Günlük Planınız</h3>
+        <div class="timeline-actions">
+          <button id="export-plan" class="export-button">
+            <i class="fas fa-download"></i> Dışa Aktar
+          </button>
+          <button id="close-timeline" class="close-button">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <div class="timeline" id="timeline">
+        <!-- Timeline items representing the day plan will be inserted here -->
+      </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="help-modal" id="help-modal">
+      <div class="help-modal-content">
+        <div class="help-modal-header">
+          <h2><i class="fas fa-map-marked-alt"></i> Nasıl Kullanılır?</h2>
+          <button class="help-close-button" id="help-close">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        
+        <div class="help-modal-body">
+          <div class="help-section">
+            <h3><i class="fas fa-search"></i> Genel Keşif Modu</h3>
+            <div class="help-steps">
+              <div class="help-step">
+                <span class="step-number">1</span>
+                <div class="step-content">
+                  <strong>Arama yapın:</strong> Arama çubuğuna merak ettiğiniz yeri yazın
+                  <div class="help-examples">
+                    <span>"İstanbul tarihi yerler"</span>
+                    <span>"Kapadokya gezilecek yerler"</span>
+                  </div>
+                </div>
+              </div>
+              <div class="help-step">
+                <span class="step-number">2</span>
+                <div class="step-content">
+                  <strong>Keşfedin:</strong> AI size önerilen konumları haritada gösterecek
+                </div>
+              </div>
+              <div class="help-step">
+                <span class="step-number">3</span>
+                <div class="step-content">
+                  <strong>Detayları görün:</strong> Konum kartlarına tıklayarak daha fazla bilgi alın
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="help-section">
+            <h3><i class="fas fa-calendar-alt"></i> Günlük Planlayıcı Modu</h3>
+            <div class="help-steps">
+              <div class="help-step">
+                <span class="step-number">1</span>
+                <div class="step-content">
+                  <strong>Modu açın:</strong> "Günlük Planlayıcı Modu" toggle'ını aktifleştirin
+                </div>
+              </div>
+              <div class="help-step">
+                <span class="step-number">2</span>
+                <div class="step-content">
+                  <strong>Plan isteyin:</strong> Günlük plan talebinizi yazın
+                  <div class="help-examples">
+                    <span>"İstanbul'da bir gün"</span>
+                    <span>"Ankara kültür turu"</span>
+                  </div>
+                </div>
+              </div>
+              <div class="help-step">
+                <span class="step-number">3</span>
+                <div class="step-content">
+                  <strong>Timeline'ı görün:</strong> Saatli programınız otomatik olarak açılacak
+                </div>
+              </div>
+              <div class="help-step">
+                <span class="step-number">4</span>
+                <div class="step-content">
+                  <strong>Dışa aktarın:</strong> Planınızı metin dosyası olarak kaydedin
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="help-section">
+            <h3><i class="fas fa-mouse-pointer"></i> Kontroller</h3>
+            <div class="help-controls">
+              <div class="control-item">
+                <i class="fas fa-undo"></i>
+                <span><strong>Reset:</strong> Haritayı temizle</span>
+              </div>
+              <div class="control-item">
+                <i class="fas fa-chevron-left"></i>
+                <i class="fas fa-chevron-right"></i>
+                <span><strong>Oklar:</strong> Konumlar arasında geçiş</span>
+              </div>
+              <div class="control-item">
+                <i class="fas fa-download"></i>
+                <span><strong>Dışa Aktar:</strong> Günlük planı kaydet</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="help-tips">
+            <h4><i class="fas fa-lightbulb"></i> İpuçları</h4>
+            <ul>
+              <li>Daha spesifik aramalar daha iyi sonuçlar verir</li>
+              <li>Günlük planlarda şehir adı belirtmeyi unutmayın</li>
+              <li>Harita üzerinde konumlara tıklayarak detayları görebilirsiniz</li>
+              <li>Timeline'da konumlara tıklayarak haritada odaklanabilirsiniz</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
