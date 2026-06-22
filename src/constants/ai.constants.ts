@@ -75,4 +75,7 @@ Unutma: Varsayılan modda, açıkça seyahat veya coğrafya hakkında olmasa bil
 /**
  * API endpoint URL
  */
-export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/generate-map';
+export const API_URL = (() => {
+    const base = (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/$/, '');
+    return base ? `${base}/api/generate-map` : '/api/generate-map';
+})();
