@@ -1,133 +1,95 @@
-# 🗺️ AI Harita Planlama ve Bilgi (`ai_map_planning_and_info`)
+# 🗺️ AI Harita Planlama ve Bilgi (Interactive Travel Planner & Discovery Map)
 
-Türkiye odaklı **interaktif harita** uygulaması: serbest metinle konum keşfi ve **günlük seyahat planı** modu (saatli timeline, ulaşım notları, dışa aktarma). Tüm harita/AI üretimi **Gemini Gateway** endpoint’i `POST /api/generate-map` üzerinden yapılır; istemciye API anahtarı verilmez.
+AI Harita Planlama ve Bilgi; kullanıcıların doğal dilde aramalar yaparak coğrafi keşifler yapmasını, saatli günlük seyahat planları (itinerary) oluşturmasını ve Leaflet harita üzerinde interaktif olarak rotalarını planlamasını sağlayan modern bir **Vite + TypeScript + Leaflet** web uygulamasıdır.
 
-**Canlı:** [ai-map-planning-and-info.vercel.app](https://ai-map-planning-and-info.vercel.app)  
-**GitHub:** [yucel-gumus/ai_map_planning_and_info](https://github.com/yucel-gumus/ai_map_planning_and_info)
-
----
-
-## Modlar
-
-### 1. Genel keşif
-- Kullanıcı doğal dilde arama yapar (“Kapadokya gezilecek yerler”)
-- AI konum listesi döner; haritada marker + carousel kartlar
-- Blur loading ve popup detayları
-
-### 2. Günlük planlayıcı
-- Toggle ile plan modu açılır
-- AI saat sıralı program, konumlar arası süre/tür önerir
-- Timeline görünümü ve metin dosyası olarak export
+Uygulamanın yapay zeka operasyonları, API anahtarı güvenliğini sağlamak amacıyla yerleşik bir **Vercel Serverless Function Proxy** katmanı üzerinden yürütülür.
 
 ---
 
-## Mimari
+## 🌟 Öne Çıkan Özellikler
+
+### 1. Genel Keşif Modu (Discovery Mode)
+* **Doğal Dil ile Arama:** Kullanıcılar serbest metinlerle arama yapar (Örn: *"Kapadokya'da gezilecek en popüler 5 yer"* veya *"İzmir tarihi yerler"*).
+* **Akıllı Konum İşaretleme:** Yapay zeka sorgulanan yerleri listeler, koordinatlarını çıkartır ve haritada markerlar ile işaretler.
+* **Görsel Detay Kartları:** Harita altında, her konuma ait blur loading efektli detaylı bilgi kartları ve carousel listesi gösterilir.
+
+### 2. Günlük Seyahat Planlayıcı Modu (Itinerary Mode)
+* **Zaman Çizelgesi (Timeline):** Yapay zeka seyahatin başlangıç saatine göre saatli ve sıralı bir seyahat programı çıkarır.
+* **Ulaşım ve Seyahat Süreleri:** Konumlar arasındaki tahmini seyahat süreleri ve en uygun ulaşım yöntemleri (yürüyüş, toplu taşıma, araç) AI tarafından hesaplanıp listelenir.
+* **Planı Dışa Aktarma (Export):** Hazırlanan günlük seyahat planı tek tıkla metin dosyası (.txt) olarak bilgisayara indirilebilir.
+
+---
+
+## 🏗️ Mimarî Yapı ve Güvenlik Gücü
+
+Uygulama, istemci tarafında (tarayıcıda) hiçbir şekilde API anahtarı barındırmaz. Güvenlik ve veri akışı şu şekilde sağlanır:
 
 ```
-React + Vite + Leaflet
-        │
-        POST /api/generate-map  { prompt, mode, ... }
-        │
-        ├─► Vercel serverless (api/generate-map.ts)
-        │         GATEWAY_CLIENT_API_KEY (server)
-        │         └─► https://api.yucelgumus.dev/api/generate-map
-        │
-        └─► dev: vite proxy aynı path → gateway
+[ İstemci (Vite + Leaflet) ] ──(POST /api/generate-map)──► [ Vercel Serverless (api/generate-map.ts) ]
+                                                                       │
+                                                             (X-API-Key Yetkilendirme)
+                                                                       ▼
+[ Gemini 3.5 Flash ] ◄──(Koordinat & Plan Üretimi)──── [ Python Gateway (api.yucelgumus.dev) ]
 ```
 
-`src/constants/ai.constants.ts` endpoint’i `VITE_API_BASE_URL` ile override edilebilir; boş bırakılırsa same-origin `/api/generate-map` kullanılır.
+* **Vercel Serverless Proxy:** İstemciden gelen `/api/generate-map` isteklerini yakalar, server-side env'de saklanan `GATEWAY_CLIENT_API_KEY`'i ekler ve canlı API Gateway'e (`https://api.yucelgumus.dev`) iletir.
+* **Dev Proxy:** Geliştirme ortamında (localhost) CORS engeline takılmamak için Vite dev proxy yapılandırması kullanılır.
 
 ---
 
-## Kurulum
-
-```bash
-git clone https://github.com/yucel-gumus/ai_map_planning_and_info.git
-cd ai_map_planning_and_info
-npm install
-cp .env.example .env
-```
-
-**Sunucu tarafı (Vercel / lokal API route):**
-
-```env
-AI_API_URL=https://api.yucelgumus.dev
-GATEWAY_CLIENT_API_KEY=your_plain_client_key
-```
-
-**İstemci (opsiyonel):**
-
-```env
-VITE_API_BASE_URL=   # boş = Vercel function
-```
-
-```bash
-npm run dev
-# http://localhost:5173
-```
-
----
-
-## Vercel production
-
-- `api/generate-map.ts` gateway proxy
-- `scripts/vercel_prod_deploy.py` — env senkron ve prod deploy yardımcısı
-- **Asla** `VITE_GEMINI_API_KEY` ile anahtarı bundle’a koymayın (eski README anti-pattern)
-
----
-
-## Örnek istekler
-
-**Keşif:** “İstanbul'daki tarihi yerler”  
-**Plan:** “İstanbul'da bir gün — sabah 09:00’dan başla”
-
-Gateway yanıtı yapılandırılmış konum dizisi + plan adımları olarak parse edilir (şema gateway sürümüne bağlı).
-
----
-
-## Teknoloji
-
-| Bileşen | Sürüm / not |
-|---------|-------------|
-| TypeScript | ~5.7 |
-| Vite | ^6 |
-| Leaflet | Harita motoru |
-| AI | Gemini via [llm_api](https://github.com/yucel-gumus/llm_api) |
-
----
-
-## Proje yapısı
+## 📂 Proje Klasör Yapısı
 
 ```
 ai_map_planning_and_info/
 ├── src/
-│   ├── components/     # Harita, arama, timeline UI
-│   ├── constants/      # AI endpoint sabitleri
-│   └── ...
+│   ├── components/       # Harita arayüzü, sepet, timeline ve arama panelleri
+│   ├── constants/        # AI API endpoint sabitleri
+│   ├── styles/           # CSS ve UI layout stilleri
+│   ├── utils/            # İhracat (export) ve veri dönüştürücü araçlar
+│   ├── app.ts            # Ana uygulama bileşeni ve durum yönetimi
+│   └── main.ts
 ├── api/
-│   └── generate-map.ts # Vercel gateway proxy
-├── vite.config.ts      # Dev proxy → AI_API_URL
-└── vercel.json
+│   └── generate-map.ts   # Vercel Serverless Function (Gateway Proxy)
+├── vercel.json           # Vercel yönlendirme ve API yapılandırmaları
+├── vite.config.ts        # Geliştirme sunucusu proxy ayarları
+└── package.json
 ```
 
 ---
 
-## Sorun giderme
+## 🚀 Kurulum ve Yerel Çalıştırma
 
-| Sorun | Kontrol |
-|-------|---------|
-| 403 | `GATEWAY_CLIENT_API_KEY` düz metin, base64 değil |
-| Boş harita | Gateway log, geocoding |
-| Lokal çalışmıyor | `AI_API_URL` ve gateway ayakta mı |
+### 1. Bağımlılıkları Yükleyin
+```bash
+git clone https://github.com/yucel-gumus/ai_map_planning_and_info.git
+cd ai_map_planning_and_info
+npm install
+```
+
+### 2. Çevresel Değişkenler (`.env`)
+Proje kök dizininde `.env` oluşturun ve anahtarları tanımlayın:
+
+```env
+# Sunucu Tarafı (Vercel Serverless / Local API için)
+AI_API_URL=https://api.yucelgumus.dev
+GATEWAY_CLIENT_API_KEY=your_plain_client_api_key
+```
+
+### 3. Geliştirme Sunucusunu Başlatma
+```bash
+npm run dev
+```
+Uygulama `http://localhost:5173` adresinde başlayacaktır.
+
+### 4. Vercel Dağıtımı (Production Deploy)
+Projenizi Vercel CLI veya Vercel Git entegrasyonu ile deploy etmek için:
+```bash
+vercel --prod
+```
+*Not: Vercel Dashboard üzerinden `AI_API_URL` ve `GATEWAY_CLIENT_API_KEY` değişkenlerini tanımlamayı unutmayın.*
 
 ---
 
-## Lisans
-
-Apache-2.0
-
----
-
-## İletişim
-
-Geliştirici: [Yücel Gümüş](https://github.com/yucel-gumus)
+## 🔗 Canlı Bağlantılar
+* **Canlı Demo:** [https://ai-map-planning-and-info.vercel.app](https://ai-map-planning-and-info.vercel.app)
+* **Python API Gateway:** [yucel-gumus/llm_api](https://github.com/yucel-gumus/llm_api)
