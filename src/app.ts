@@ -1,16 +1,25 @@
 import type { LocationArgs, LineArgs } from './types';
 import { initMapContainer } from './components/Map';
-import { initSearchBar, showError, clearError } from './components/Search/SearchBar';
+import { initSearchBar, showError, clearError, showLoading, hideLoading } from './components/Search/SearchBar';
 import { initModeToggle } from './components/Search/ModeToggle';
 import { initTimeline, showTimelineWithContent } from './components/Timeline';
 import { initCardCarousel, renderCards, clearCarousel, highlightCard } from './components/Cards';
 import { initHelpModal } from './components/Modal';
 import { clearMap, addLocation, addRoute } from './hooks/useMap';
-import { getDayPlanItinerary, addToDayPlan, clearDayPlan, sortDayPlanItinerary } from './hooks/usePlanner';
+import {
+    getDayPlanItinerary,
+    addToDayPlan,
+    clearDayPlan,
+    sortDayPlanItinerary,
+    setNoticeMessage,
+    getExcludedLocations
+} from './hooks/usePlanner';
 import { resetTimeline } from './hooks/useTimeline';
 import { getAIService } from './services/ai.service';
 
 let isInitialized = false;
+let currentQuery = '';
+let currentPlannerMode = false;
 
 function restart(): void {
     clearMap();
@@ -19,19 +28,29 @@ function restart(): void {
     resetTimeline();
 }
 
-async function handleSearch(query: string, plannerMode: boolean): Promise<void> {
+async function handleSearch(
+    query: string,
+    plannerMode: boolean,
+    excludedLocations: string[] = []
+): Promise<void> {
     clearError();
+    currentQuery = query;
+    currentPlannerMode = plannerMode;
+
     restart();
 
     const aiService = getAIService();
 
     const result = await aiService.generateContent(
         query,
-        plannerMode,
+        {
+            isPlannerMode: plannerMode,
+            excludedLocations: excludedLocations
+        },
         {
             onLocation: async (args: LocationArgs) => {
                 const location = await addLocation(args, plannerMode);
-                if (plannerMode && args.time) {
+                if (plannerMode && (args.time || args.day)) {
                     addToDayPlan(location);
                 }
             },
@@ -45,6 +64,10 @@ async function handleSearch(query: string, plannerMode: boolean): Promise<void> 
         throw new Error(result.error || 'Bir hata oluştu');
     }
 
+    if (result.noticeMessage) {
+        setNoticeMessage(result.noticeMessage);
+    }
+
     if (plannerMode && getDayPlanItinerary().length > 0) {
         sortDayPlanItinerary();
         showTimelineWithContent();
@@ -53,7 +76,20 @@ async function handleSearch(query: string, plannerMode: boolean): Promise<void> 
     renderCards();
 }
 
+function handleRePlan(excludedLocations: string[]): void {
+    if (!currentQuery) return;
+    showLoading();
+    handleSearch(currentQuery, currentPlannerMode, excludedLocations)
+        .catch(err => {
+            showError(err instanceof Error ? err.message : 'Plan güncellenemedi');
+        })
+        .finally(() => {
+            hideLoading();
+        });
+}
+
 function handleReset(): void {
+    currentQuery = '';
     restart();
 }
 
@@ -72,7 +108,7 @@ export function initApp(): void {
         initMapContainer('map');
         initSearchBar(handleSearch, handleReset);
         initModeToggle();
-        initTimeline(handleCardHighlight);
+        initTimeline(handleCardHighlight, handleRePlan);
         initCardCarousel();
         initHelpModal();
 

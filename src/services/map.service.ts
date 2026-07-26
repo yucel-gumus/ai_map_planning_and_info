@@ -7,6 +7,8 @@ import {
     POLYLINE_OPTIONS,
     POPUP_OPTIONS
 } from '../constants';
+import { fetchLocationImage } from './image.service';
+import { generatePlaceholderImage } from '../utils/transport.utils';
 
 export class MapService {
     private map: L.Map;
@@ -25,6 +27,7 @@ export class MapService {
         const map = L.map(containerId, DEFAULT_MAP_OPTIONS);
         L.tileLayer(TILE_LAYER_URL, {
             attribution: TILE_LAYER_ATTRIBUTION,
+            minZoom: DEFAULT_MAP_OPTIONS.minZoom,
             maxZoom: DEFAULT_MAP_OPTIONS.maxZoom,
         }).addTo(map);
         return map;
@@ -58,8 +61,16 @@ export class MapService {
         this.points.push(latlng);
         this.bounds.extend(latlng);
 
+        const customIcon = L.divIcon({
+            className: 'custom-map-marker',
+            html: `<div class="marker-pin-wrapper">${args.sequence ? args.sequence : '<i class="fas fa-map-marker-alt"></i>'}</div>`,
+            iconSize: [38, 38],
+            iconAnchor: [19, 19],
+        });
+
         const marker = L.marker(latlng, {
             title: args.name,
+            icon: customIcon,
         }).addTo(this.map);
 
         this.markers.push(marker);
@@ -71,7 +82,7 @@ export class MapService {
 
         let timeInfo = '';
         if (args.time) {
-            timeInfo = `<div style="margin-top: 4px; font-size: 12px; color: #2196F3;">
+            timeInfo = `<div class="popup-time-info">
                     <i class="fas fa-clock"></i> ${args.time}
                     ${args.duration ? ` • ${args.duration}` : ''}
                   </div>`;
@@ -94,7 +105,25 @@ export class MapService {
             time: args.time,
             duration: args.duration,
             sequence: args.sequence,
+            day: args.day,
+            imageUrl: args.imageUrl || generatePlaceholderImage(args.name),
         };
+
+        // Asynchronously fetch and validate real photo from AI or Wikipedia API
+        fetchLocationImage(args.name, args.imageUrl).then(imgUrl => {
+            if (imgUrl) {
+                locationInfo.imageUrl = imgUrl;
+                const updateCardDOM = () => {
+                    const cardImg = document.querySelector(`.location-card[data-name="${CSS.escape(args.name)}"] .card-image`);
+                    if (cardImg) {
+                        (cardImg as HTMLElement).style.backgroundImage = `url('${imgUrl}')`;
+                    }
+                };
+                updateCardDOM();
+                setTimeout(updateCardDOM, 300);
+                setTimeout(updateCardDOM, 1000);
+            }
+        });
 
         this.popUps.push(locationInfo);
         return locationInfo;
@@ -141,7 +170,7 @@ export class MapService {
 
     fitBounds(): void {
         if (this.bounds && this.bounds.isValid()) {
-            this.map.fitBounds(this.bounds);
+            this.map.fitBounds(this.bounds, { padding: [50, 50], maxZoom: 16 });
         }
     }
 

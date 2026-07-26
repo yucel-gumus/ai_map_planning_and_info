@@ -16,7 +16,8 @@ export const DEFAULT_MAP_OPTIONS: MapOptions = {
     center: [39.9334, 32.8597], // Ankara, Türkiye
     zoom: 6,
     zoomControl: false,
-    maxZoom: 10,
+    minZoom: 5,  // Sınırlı uzaklaştırma (çok fazla uzaklaşmayı engeller)
+    maxZoom: 19, // Derin yakınlaştırma (sokak ve bina seviyesine kadar yakınlaşır)
 };
 
 /**
@@ -36,12 +37,12 @@ export const TILE_LAYER_ATTRIBUTION = '';
 /**
  * Genel mod için polyline rengi
  */
-export const DEFAULT_POLYLINE_COLOR = '#CC0099';
+export const DEFAULT_POLYLINE_COLOR = '#FFB6A6';
 
 /**
  * Planner mod için polyline rengi
  */
-export const PLANNER_POLYLINE_COLOR = '#2196F3';
+export const PLANNER_POLYLINE_COLOR = '#9BCEC1';
 
 /**
  * Polyline options
@@ -50,13 +51,13 @@ export const POLYLINE_OPTIONS = {
     default: {
         color: DEFAULT_POLYLINE_COLOR,
         opacity: 1.0,
-        weight: 3,
+        weight: 4,
     },
     planner: {
         color: PLANNER_POLYLINE_COLOR,
         opacity: 1.0,
-        weight: 4,
-        dashArray: '10, 10',
+        weight: 5,
+        dashArray: '8, 8',
     },
 } as const;
 

@@ -5,6 +5,12 @@
   <title>Interaktif Harita Gezgini</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗺️</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="/src/styles/index.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
@@ -47,95 +53,61 @@
   <div class="loading-overlay" id="loading-overlay">
     <div class="loading-spinner">
       <div class="spinner-ring"></div>
-      <div class="loading-text">Aranıyor...</div>
+      <div class="loading-text">KENSAI Araştırıyor ...</div>
     </div>
   </div>
-  <div class="timeline-container" id="timeline-container">
-    <button id="timeline-toggle" class="timeline-toggle"><i class="fas fa-calendar-alt"></i></button>
-    <div class="timeline-header">
-      <h3>Günlük Planınız</h3>
-      <div class="timeline-actions">
-        <button id="export-plan" class="export-button"><i class="fas fa-download"></i> Dışa Aktar</button>
-        <button id="close-timeline" class="close-button"><i class="fas fa-times"></i></button>
-      </div>
-    </div>
-    <div class="timeline" id="timeline"></div>
+  <div class="planner-actions-bar" id="planner-actions-bar">
+    <button id="export-plan" class="export-button"><i class="fas fa-download"></i> Dışa Aktar</button>
+    <div id="timeline-replan-bar" class="timeline-replan-bar" style="display: none;"></div>
   </div>
   <div class="help-modal" id="help-modal">
     <div class="help-modal-content">
       <div class="help-modal-header">
-        <h2><i class="fas fa-map-marked-alt"></i> Nasıl Kullanılır?</h2>
-        <button class="help-close-button" id="help-close"><i class="fas fa-times"></i></button>
+        <h2><i class="fas fa-compass"></i> Kullanım Kılavuzu</h2>
+        <button class="help-close-button" id="help-close" aria-label="Kapat"><i class="fas fa-times"></i></button>
       </div>
       <div class="help-modal-body">
-        <div class="help-section">
-          <h3><i class="fas fa-search"></i> Genel Keşif Modu</h3>
-          <div class="help-steps">
-            <div class="help-step">
-              <span class="step-number">1</span>
-              <div class="step-content">
-                <strong>Arama yapın:</strong> Arama çubuğuna merak ettiğiniz yeri yazın
-                <div class="help-examples"><span>"İstanbul tarihi yerler"</span><span>"Kapadokya gezilecek
-                    yerler"</span></div>
-              </div>
+
+        <div class="help-grid">
+          <div class="help-card">
+            <div class="help-card-header">
+              <span class="help-card-badge"><i class="fas fa-search"></i></span>
+              <h3>Genel Keşif Modu</h3>
             </div>
-            <div class="help-step">
-              <span class="step-number">2</span>
-              <div class="step-content"><strong>Keşfedin:</strong> AI size önerilen konumları haritada gösterecek</div>
+            <p>Şehir veya mekan adını yazarak AI destekli harita önerilerini keşfedin.</p>
+            <div class="help-chips">
+              <span>"İstanbul tarihi yerler"</span>
+              <span>"Kapadokya gezisi"</span>
             </div>
-            <div class="help-step">
-              <span class="step-number">3</span>
-              <div class="step-content"><strong>Detayları görün:</strong> Konum kartlarına tıklayarak daha fazla bilgi
-                alın</div>
+          </div>
+
+          <div class="help-card">
+            <div class="help-card-header">
+              <span class="help-card-badge"><i class="fas fa-calendar-alt"></i></span>
+              <h3>Günlük Planlayıcı</h3>
+            </div>
+            <p>Toggle'ı aktif yapın, saatli ve rotalı gezi programınız otomatik hazırlansın.</p>
+            <div class="help-chips">
+              <span>"Ankara kültür turu"</span>
+              <span>"İzmir 1 günlük plan"</span>
             </div>
           </div>
         </div>
-        <div class="help-section">
-          <h3><i class="fas fa-calendar-alt"></i> Günlük Planlayıcı Modu</h3>
-          <div class="help-steps">
-            <div class="help-step">
-              <span class="step-number">1</span>
-              <div class="step-content"><strong>Modu açın:</strong> "Günlük Planlayıcı Modu" toggle'ını aktifleştirin
-              </div>
-            </div>
-            <div class="help-step">
-              <span class="step-number">2</span>
-              <div class="step-content">
-                <strong>Plan isteyin:</strong> Günlük plan talebinizi yazın
-                <div class="help-examples"><span>"İstanbul'da bir gün"</span><span>"Ankara kültür turu"</span></div>
-              </div>
-            </div>
-            <div class="help-step">
-              <span class="step-number">3</span>
-              <div class="step-content"><strong>Timeline'ı görün:</strong> Saatli programınız otomatik olarak açılacak
-              </div>
-            </div>
-            <div class="help-step">
-              <span class="step-number">4</span>
-              <div class="step-content"><strong>Dışa aktarın:</strong> Planınızı metin dosyası olarak kaydedin</div>
-            </div>
+
+        <div class="help-controls-bar">
+          <div class="control-badge"><i class="fas fa-undo"></i> <span><strong>Reset:</strong> Haritayı Temizle</span>
+          </div>
+          <div class="control-badge"><i class="fas fa-chevron-left"></i><i class="fas fa-chevron-right"></i>
+            <span><strong>Oklar:</strong> Kart Geçişi</span></div>
+          <div class="control-badge"><i class="fas fa-download"></i> <span><strong>Dışa Aktar:</strong> Kaydet</span>
           </div>
         </div>
-        <div class="help-section">
-          <h3><i class="fas fa-mouse-pointer"></i> Kontroller</h3>
-          <div class="help-controls">
-            <div class="control-item"><i class="fas fa-undo"></i><span><strong>Reset:</strong> Haritayı temizle</span>
-            </div>
-            <div class="control-item"><i class="fas fa-chevron-left"></i><i
-                class="fas fa-chevron-right"></i><span><strong>Oklar:</strong> Konumlar arasında geçiş</span></div>
-            <div class="control-item"><i class="fas fa-download"></i><span><strong>Dışa Aktar:</strong> Günlük planı
-                kaydet</span></div>
-          </div>
+
+        <div class="help-tip-bar">
+          <i class="fas fa-lightbulb"></i>
+          <span>Konum kartlarına veya timeline adımlarına tıklayarak haritada anında odaklanabilirsiniz.</span>
         </div>
-        <div class="help-tips">
-          <h4><i class="fas fa-lightbulb"></i> İpuçları</h4>
-          <ul>
-            <li>Daha spesifik aramalar daha iyi sonuçlar verir</li>
-            <li>Günlük planlarda şehir adı belirtmeyi unutmayın</li>
-            <li>Harita üzerinde konumlara tıklayarak detayları görebilirsiniz</li>
-            <li>Timeline'da konumlara tıklayarak haritada odaklanabilirsiniz</li>
-          </ul>
-        </div>
+
       </div>
     </div>
   </div>

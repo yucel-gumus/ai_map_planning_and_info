@@ -109,6 +109,7 @@ export function hideLoading(): void {
 export function showError(message: string): void {
     if (errorMessage) {
         setHTML(errorMessage, message);
+        addClass(errorMessage, 'visible');
     }
 }
 
@@ -118,6 +119,7 @@ export function showError(message: string): void {
 export function clearError(): void {
     if (errorMessage) {
         setHTML(errorMessage, '');
+        removeClass(errorMessage, 'visible');
     }
 }
 

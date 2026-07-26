@@ -21,6 +21,9 @@ export interface Location {
     time?: string;
     duration?: string;
     sequence?: number;
+    day?: number;
+    status?: 'normal' | 'visited' | 'excluded';
+    imageUrl?: string;
 }
 
 /**
@@ -34,6 +37,8 @@ export interface LocationArgs {
     time?: string;
     duration?: string;
     sequence?: number;
+    day?: number;
+    imageUrl?: string;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -90,6 +95,7 @@ export interface MapOptions {
     center: L.LatLngExpression;
     zoom: number;
     zoomControl: boolean;
+    minZoom?: number;
     maxZoom: number;
 }
 
@@ -177,6 +183,8 @@ export interface GenerateResult {
     locations: Location[];
     lines: Line[];
     textResponse?: string;
+    noticeMessage?: string;
+    totalDays?: number;
     error?: string;
 }
 

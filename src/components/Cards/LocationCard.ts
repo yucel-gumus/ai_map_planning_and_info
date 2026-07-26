@@ -6,22 +6,23 @@
 import { createElement } from '../../utils/dom.utils';
 import { generatePlaceholderImage } from '../../utils/transport.utils';
 import type { Location } from '../../types';
+import {
+    toggleVisitedLocation,
+    isVisitedLocation,
+    toggleExcludedLocation,
+    isExcludedLocation
+} from '../../hooks/usePlanner';
 
 /**
- * Location card elementi oluşturur
- * @param location - Location bilgisi
- * @param index - Card index
- * @param isPlannerMode - Planner modu aktif mi
- * @param isActive - Aktif card mı
- * @param onClick - Click callback
- * @returns Card elementi
+ * Location card elementi oluşturur (Çoklu Gün & İnteraktif Eylemler Destekli)
  */
 export function createLocationCard(
     location: Location,
     index: number,
     isPlannerMode: boolean,
     isActive: boolean,
-    onClick: (index: number) => void
+    onClick: (index: number) => void,
+    onActionChange?: () => void
 ): HTMLDivElement {
     const card = createElement('div', { className: 'location-card' });
 
@@ -33,11 +34,26 @@ export function createLocationCard(
         card.classList.add('card-active');
     }
 
-    const imageUrl = generatePlaceholderImage(location.name);
+    const isVisited = isVisitedLocation(location.name);
+    const isExcluded = isExcludedLocation(location.name);
+
+    if (isVisited) {
+        card.classList.add('card-status-visited');
+    }
+    if (isExcluded) {
+        card.classList.add('card-status-excluded');
+    }
+
+    card.setAttribute('data-name', location.name);
+
+    const imageUrl = location.imageUrl || generatePlaceholderImage(location.name);
     let cardContent = `<div class="card-image" style="background-image: url('${imageUrl}')"></div>`;
 
-    // Planner mode badges
+    // Planner mode badges & Day badges
     if (isPlannerMode) {
+        if (location.day) {
+            cardContent += `<div class="card-day-badge">${location.day}. Gün</div>`;
+        }
         if (location.sequence) {
             cardContent += `<div class="card-sequence-badge">${location.sequence}</div>`;
         }
@@ -46,21 +62,43 @@ export function createLocationCard(
         }
     }
 
-    // Card content
+    // Card content body with action buttons
     cardContent += `
     <div class="card-content">
       <h3 class="card-title">${location.name}</h3>
       <p class="card-description">${location.description}</p>
       ${isPlannerMode && location.duration ? `<div class="card-duration">${location.duration}</div>` : ''}
+      
+      ${isPlannerMode ? `
+      <div class="card-action-bar">
+        <button class="card-action-btn btn-exclude ${isExcluded ? 'is-active' : ''}" data-action="exclude" title="Bu mekanı plandan çıkar ve alternatif öner">
+          <i class="fas ${isExcluded ? 'fa-minus-circle' : 'fa-ban'}"></i> ${isExcluded ? 'Çıkarıldı' : 'Çıkar'}
+        </button>
+      </div>` : ''}
+
       <div class="card-coordinates">
-        ${location.position.lat.toFixed(5)}, ${location.position.lng.toFixed(5)}
+        ${location.position.lat.toFixed(4)}, ${location.position.lng.toFixed(4)}
       </div>
     </div>
   `;
 
     card.innerHTML = cardContent;
 
-    // Click handler
+    // Action button click listener
+    const excludeBtn = card.querySelector('.btn-exclude');
+
+    excludeBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const active = toggleExcludedLocation(location.name);
+        if (active) {
+            card.classList.add('card-status-excluded');
+        } else {
+            card.classList.remove('card-status-excluded');
+        }
+        if (onActionChange) onActionChange();
+    });
+
+    // Card select handler
     card.addEventListener('click', () => onClick(index));
 
     return card;
@@ -68,9 +106,6 @@ export function createLocationCard(
 
 /**
  * Carousel dot elementi oluşturur
- * @param index - Dot index
- * @param isActive - Aktif mi
- * @returns Dot elementi
  */
 export function createCarouselDot(_index: number, isActive: boolean): HTMLDivElement {
     const dot = createElement('div', { className: 'carousel-dot' });

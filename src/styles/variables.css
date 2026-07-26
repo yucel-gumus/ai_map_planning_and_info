@@ -1,83 +1,104 @@
 /**
- * CSS Variables
- * @description Uygulama genelinde kullanılan CSS değişkenleri
+ * CSS Variables (60-30-10 Rule Design System)
+ * @description Exclusively 3 colors: #FFEBD3, #FFB6A6, #9BCEC1
  */
 
 :root {
-    /* Colors - Primary */
-    --color-primary: #2196F3;
-    --color-primary-dark: #1976D2;
-    --color-primary-light: #e3f2fd;
+    /* STRICT 60-30-10 COLOR PALETTE */
+    /* 60% Dominant (Sand / Warm Pastel Cream) */
+    --color-dominant: #FFEBD3;
+    --color-dominant-rgb: 255, 235, 211;
+    
+    /* 30% Secondary (Soft Coral / Warm Rose) */
+    --color-secondary: #FFB6A6;
+    --color-secondary-rgb: 255, 182, 166;
+    
+    /* 10% Accent (Sage / Mint Teal) */
+    --color-accent: #9BCEC1;
+    --color-accent-rgb: 155, 206, 193;
 
-    /* Colors - Secondary */
-    --color-secondary: #CC0099;
+    /* Semantic Token Mappings */
+    --color-bg: var(--color-dominant);
+    --color-surface: var(--color-dominant);
+    --color-card-bg: var(--color-secondary);
+    --color-card-border: var(--color-accent);
+    
+    --color-text-primary: #5A322C; /* High-contrast warm coral shadow derived from #FFB6A6 / #9BCEC1 tones */
+    --color-text-heading: #2D4C44; /* High-contrast deep teal shade derived from #9BCEC1 */
+    --color-text-light: #804840;
 
-    /* Colors - Neutral */
-    --color-white: #ffffff;
-    --color-black: #000000;
-    --color-gray-50: #f8f9fa;
-    --color-gray-100: #f5f5f5;
-    --color-gray-200: #eeeeee;
-    --color-gray-300: #dddddd;
-    --color-gray-400: #d1d1d1;
-    --color-gray-500: #999999;
-    --color-gray-600: #717171;
-    --color-gray-700: #666666;
-    --color-gray-800: #333333;
-    --color-gray-900: #222222;
+    --color-primary: var(--color-accent);
+    --color-primary-dark: #7CAAA0;
+    --color-primary-light: rgba(155, 206, 193, 0.25);
 
-    /* Colors - Status */
-    --color-error: #ff0000;
-    --color-success: #4caf50;
-    --color-warning: #ff9800;
+    --color-white: #FFEBD3;
+    --color-black: #2D4C44;
+    --color-gray-50: rgba(255, 235, 211, 0.4);
+    --color-gray-100: rgba(255, 182, 166, 0.15);
+    --color-gray-200: rgba(255, 182, 166, 0.3);
+    --color-gray-300: var(--color-secondary);
+    --color-gray-400: #E29B8C;
+    --color-gray-500: #804840;
+    --color-gray-600: #5A322C;
+    --color-gray-700: #462520;
+    --color-gray-800: #381C18;
+    --color-gray-900: #2D4C44;
+
+    /* Status mapped to palette */
+    --color-error: var(--color-secondary);
+    --color-success: var(--color-accent);
+    --color-warning: var(--color-secondary);
 
     /* Typography */
-    --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
-    --font-size-xs: 10px;
-    --font-size-sm: 12px;
-    --font-size-base: 14px;
-    --font-size-md: 16px;
-    --font-size-lg: 18px;
-    --font-size-xl: 20px;
+    --font-size-xs: 11px;
+    --font-size-sm: 13px;
+    --font-size-base: 15px;
+    --font-size-md: 17px;
+    --font-size-lg: 20px;
+    --font-size-xl: 24px;
+    --font-size-2xl: 30px;
 
     --font-weight-normal: 400;
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
+    --font-weight-extra-bold: 800;
 
     --line-height-tight: 1.3;
-    --line-height-normal: 1.5;
+    --line-height-normal: 1.6;
 
-    /* Spacing */
+    /* Spacing Scale (8dp rhythm) */
     --spacing-xs: 4px;
     --spacing-sm: 8px;
     --spacing-md: 12px;
     --spacing-lg: 16px;
-    --spacing-xl: 20px;
-    --spacing-2xl: 24px;
-    --spacing-3xl: 32px;
+    --spacing-xl: 24px;
+    --spacing-2xl: 32px;
+    --spacing-3xl: 48px;
 
-    /* Border Radius */
-    --radius-sm: 4px;
-    --radius-md: 8px;
-    --radius-lg: 12px;
-    --radius-xl: 16px;
-    --radius-2xl: 24px;
+    /* Border Radius (Organic & Modern Curved) */
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-xl: 28px;
+    --radius-2xl: 36px;
     --radius-full: 50%;
-    --radius-pill: 100px;
+    --radius-pill: 9999px;
 
-    /* Shadows */
-    --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 2px 10px rgba(0, 0, 0, 0.15);
-    --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.1);
-    --shadow-xl: 0 4px 16px rgba(0, 0, 0, 0.2);
-    --shadow-2xl: 0 20px 40px rgba(0, 0, 0, 0.2);
+    /* Shadows (Warm Tinted Shadows) */
+    --shadow-sm: 0 4px 12px rgba(90, 50, 44, 0.08);
+    --shadow-md: 0 8px 24px rgba(90, 50, 44, 0.12);
+    --shadow-lg: 0 14px 36px rgba(90, 50, 44, 0.16);
+    --shadow-xl: 0 20px 48px rgba(90, 50, 44, 0.22);
+    --shadow-accent: 0 10px 30px rgba(155, 206, 193, 0.4);
 
-    /* Transitions */
-    --transition-fast: 0.2s ease;
-    --transition-normal: 0.3s ease;
-    --transition-slow: 0.4s ease;
+    /* Transitions & Motion */
+    --transition-fast: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-spring: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
     /* Z-Index Scale */
     --z-map: 1;
@@ -89,7 +110,7 @@
     --z-modal: 10000;
 
     /* Layout */
-    --timeline-width: 320px;
-    --search-max-width: 600px;
-    --carousel-max-width: 900px;
+    --timeline-width: 360px;
+    --search-max-width: 640px;
+    --carousel-max-width: 960px;
 }

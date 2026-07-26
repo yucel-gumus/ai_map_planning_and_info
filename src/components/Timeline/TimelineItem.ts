@@ -1,38 +1,62 @@
 /**
- * TimelineItem Component
+ * TimelineItem Component (Minimalist Compact Stream)
  * @module components/Timeline/TimelineItem
  */
 
 import { createElement } from '../../utils/dom.utils';
 import type { Location } from '../../types';
+import {
+    toggleExcludedLocation,
+    isExcludedLocation
+} from '../../hooks/usePlanner';
 
 /**
- * Timeline item elementi oluşturur
- * @param item - Location bilgisi
- * @param index - Item index
- * @param onItemClick - Click callback
- * @returns Timeline item elementi
+ * Compact Timeline item elementi oluşturur (Sadeleştirilmiş Şık Akış)
  */
 export function createTimelineItem(
     item: Location,
     index: number,
-    onItemClick: (index: number, itemName: string) => void
+    onItemClick: (index: number, itemName: string) => void,
+    onActionChange?: () => void
 ): HTMLDivElement {
     const timelineItem = createElement('div', { className: 'timeline-item' });
     const timeDisplay = item.time || 'Esnek';
+    const isExcluded = isExcludedLocation(item.name);
+
+    if (isExcluded) timelineItem.classList.add('item-status-excluded');
 
     timelineItem.innerHTML = `
-    <div class="timeline-time">${timeDisplay}</div>
+    <div class="timeline-time">
+      ${item.day ? `<span class="timeline-day-pill">${item.day}. Gün</span>` : ''}
+      <span class="timeline-hour-text">${timeDisplay}</span>
+    </div>
     <div class="timeline-connector">
       <div class="timeline-dot"></div>
       <div class="timeline-line"></div>
     </div>
-    <div class="timeline-content" data-index="${index}">
-      <div class="timeline-title">${item.name}</div>
-      <div class="timeline-description">${item.description}</div>
-      ${item.duration ? `<div class="timeline-duration">${item.duration}</div>` : ''}
+    <div class="timeline-content timeline-compact-node" data-index="${index}">
+      <div class="timeline-compact-main">
+        <span class="timeline-title">${item.name}</span>
+        ${item.duration ? `<span class="timeline-duration-badge">${item.duration}</span>` : ''}
+      </div>
+      <button class="timeline-btn-action btn-exclude ${isExcluded ? 'is-active' : ''}" title="Plandan Çıkar">
+        <i class="fas ${isExcluded ? 'fa-minus-circle' : 'fa-ban'}"></i>
+      </button>
     </div>
   `;
+
+    const excludeBtn = timelineItem.querySelector('.btn-exclude');
+
+    excludeBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const active = toggleExcludedLocation(item.name);
+        if (active) {
+            timelineItem.classList.add('item-status-excluded');
+        } else {
+            timelineItem.classList.remove('item-status-excluded');
+        }
+        if (onActionChange) onActionChange();
+    });
 
     const timelineContent = timelineItem.querySelector('.timeline-content');
     if (timelineContent) {
@@ -45,12 +69,7 @@ export function createTimelineItem(
 }
 
 /**
- * Transport item elementi oluşturur
- * @param transportType - Transport tipi
- * @param transportIcon - Transport icon'u
- * @param routeName - Rota adı
- * @param travelTime - Seyahat süresi
- * @returns Transport item elementi
+ * Transport item elementi oluşturur (Compact Stream)
  */
 export function createTransportItem(
     transportType: string,
@@ -65,16 +84,16 @@ export function createTransportItem(
     transportItem.innerHTML = `
     <div class="timeline-time"></div>
     <div class="timeline-connector">
-      <div class="timeline-dot" style="background-color: #999;"></div>
+      <div class="timeline-dot transport-dot"></div>
       <div class="timeline-line"></div>
     </div>
-    <div class="timeline-content transport">
-      <div class="timeline-title">
+    <div class="timeline-content transport timeline-compact-node">
+      <div class="timeline-compact-main">
         <i class="fas fa-${transportIcon}"></i>
-        ${transportType || 'Seyahat'}
+        <span class="timeline-title">${transportType || 'Seyahat'}</span>
+        ${travelTime ? `<span class="timeline-duration-badge">${travelTime}</span>` : ''}
       </div>
-      <div class="timeline-description">${routeName}</div>
-      ${travelTime ? `<div class="timeline-duration">${travelTime}</div>` : ''}
+      <span class="transport-route-name">${routeName}</span>
     </div>
   `;
 

@@ -6,6 +6,11 @@ interface FunctionCallHandler {
     onLine: (args: LineArgs) => Promise<void>;
 }
 
+export interface GenerateOptions {
+    isPlannerMode: boolean;
+    excludedLocations?: string[];
+}
+
 interface ApiResponse {
     success: boolean;
     functionCalls?: Array<{
@@ -30,18 +35,28 @@ export class AIService {
         );
     }
 
-    private preparePrompt(prompt: string, isPlannerMode: boolean): string {
-        if (isPlannerMode) {
-            return `${prompt} day trip`;
+    private preparePrompt(prompt: string, isPlannerMode: boolean, excludedLocations: string[] = []): string {
+        let finalPrompt = prompt;
+
+        if (isPlannerMode && !/günlük|gün/i.test(prompt)) {
+            finalPrompt = `${prompt} seyahat planı`;
         }
-        return prompt;
+
+        if (excludedLocations && excludedLocations.length > 0) {
+            finalPrompt += `\n\n[ÖNEMLİ KISITLAMA] Daha önce gidilen veya kesinlikle plana eklenmesi istenmeyen mekanlar: ${excludedLocations.join(', ')}. Bu mekanları kesinlikle plana veya haritaya DAHİL ETME. Bunların yerine alternatif harika yerler öner.`;
+        }
+
+        return finalPrompt;
     }
 
     async generateContent(
         prompt: string,
-        isPlannerMode: boolean,
+        options: boolean | GenerateOptions,
         handlers: FunctionCallHandler
     ): Promise<GenerateResult> {
+        const isPlannerMode = typeof options === 'boolean' ? options : options.isPlannerMode;
+        const excludedLocations = typeof options === 'object' && options.excludedLocations ? options.excludedLocations : [];
+
         const result: GenerateResult = {
             success: false,
             locations: [],
@@ -49,7 +64,7 @@ export class AIService {
         };
 
         try {
-            const finalPrompt = this.preparePrompt(prompt, isPlannerMode);
+            const finalPrompt = this.preparePrompt(prompt, isPlannerMode, excludedLocations);
             const systemInstructions = this.getSystemInstructions(isPlannerMode);
 
             const response = await fetch(this.apiUrl, {
@@ -97,6 +112,9 @@ export class AIService {
 
             result.success = true;
             result.textResponse = data.text;
+            if (data.text && (data.text.includes('ideal') || data.text.includes('günlük') || data.text.includes('uyarı'))) {
+                result.noticeMessage = data.text;
+            }
         } catch (error) {
             result.success = false;
             result.error = error instanceof Error

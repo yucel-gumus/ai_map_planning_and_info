@@ -15,6 +15,7 @@ import {
 import { isPlannerMode } from '../../hooks/usePlanner';
 import { highlightTimelineItem } from '../../hooks/useTimeline';
 import { createLocationCard, createCarouselDot } from './LocationCard';
+import { renderTimeline } from '../Timeline/Timeline';
 
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -57,7 +58,11 @@ export function renderCards(): void {
             index,
             isPlannerMode(),
             isActive,
-            handleCardClick
+            handleCardClick,
+            () => {
+                renderCards();
+                renderTimeline();
+            }
         );
         cardContainer!.appendChild(card);
 

@@ -4,8 +4,8 @@
  */
 
 import { $, addClass, removeClass, show, hide } from '../utils/dom.utils';
-import { getPopUps } from './useMap';
-
+import { getPopUps, getBounds, fitBounds } from './useMap';
+import { UI_TIMING } from '../constants/ui.constants';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // State
@@ -81,12 +81,12 @@ export function showTimeline(): void {
 
         if (window.innerWidth > 768) {
             addClass(mapContainer, 'map-container-shifted');
-            adjustInterfaceForTimeline(true);
+            adjustInterfaceForTimeline();
             window.dispatchEvent(new Event('resize'));
         } else {
             addClass(mapOverlay, 'visible');
         }
-    }, 10);
+    }, UI_TIMING.DRAWER_SLIDE_DELAY);
 }
 
 /**
@@ -100,13 +100,13 @@ export function hideTimeline(): void {
     removeClass(timelineContainer, 'visible');
     removeClass(mapContainer, 'map-container-shifted');
     removeClass(mapOverlay, 'visible');
-    adjustInterfaceForTimeline(false);
+    adjustInterfaceForTimeline();
     state.isVisible = false;
 
     setTimeout(() => {
         hide(timelineContainer);
         window.dispatchEvent(new Event('resize'));
-    }, 300);
+    }, UI_TIMING.ANIMATION_NORMAL);
 }
 
 /**
@@ -121,19 +121,15 @@ export function toggleTimeline(): void {
 }
 
 /**
- * Timeline interface'ini ayarlar
- * @param isTimelineVisible - Timeline görünür mü
+ * Timeline harita görünümünü ayarlar
  */
-function adjustInterfaceForTimeline(_isTimelineVisible: boolean): void {
-    // Import döngüsünü kırmak için dynamic import
-    import('./useMap').then(({ getBounds, fitBounds }) => {
-        const bounds = getBounds();
-        if (bounds && bounds.isValid()) {
-            setTimeout(() => {
-                fitBounds();
-            }, 350);
-        }
-    });
+function adjustInterfaceForTimeline(): void {
+    const bounds = getBounds();
+    if (bounds && bounds.isValid()) {
+        setTimeout(() => {
+            fitBounds();
+        }, UI_TIMING.RESIZE_INVALIDATE_DELAY);
+    }
 }
 
 /**
