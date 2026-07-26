@@ -140,7 +140,8 @@ input:checked + .slider:before {
 }
 
 #prompt-input::placeholder {
-    color: rgba(255, 235, 211, 0.75);
+    color: #F8ECE0;
+    opacity: 0.95;
     font-weight: var(--font-weight-normal);
 }
 

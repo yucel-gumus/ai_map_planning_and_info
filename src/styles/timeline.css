@@ -42,12 +42,12 @@
 
 /* Re-Plan Action Bar */
 .timeline-replan-bar {
-    background: linear-gradient(135deg, var(--color-accent), #88C3B4);
+    background: linear-gradient(135deg, var(--color-accent), #3C8B76);
     padding: 6px 12px;
     display: flex;
     align-items: center;
     border-radius: var(--radius-pill);
-    box-shadow: 0 4px 16px rgba(45, 76, 68, 0.25);
+    box-shadow: 0 4px 16px rgba(25, 54, 48, 0.3);
     border: 2px solid var(--color-secondary);
     gap: var(--spacing-sm);
 }

@@ -53,7 +53,7 @@ export function generatePrintableHtml(itinerary: Location[], lines: Line[]): str
         `;
 
         items.forEach((item, idx) => {
-            const imgStyle = item.imageUrl ? `background-image: url('${item.imageUrl}')` : 'background-color: #FFB6A6';
+            const imgStyle = item.imageUrl ? `background-image: url('${item.imageUrl}')` : 'background-color: #E28B7B';
             daysHtml += `
             <div class="pdf-card">
               <div class="pdf-card-img" style="${imgStyle}"></div>
@@ -104,16 +104,16 @@ export function generatePrintableHtml(itinerary: Location[], lines: Line[]): str
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
     
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-    body { background-color: #FFF9F2; color: #2D4C44; padding: 40px; }
+    body { background-color: #F8ECE0; color: #193630; padding: 40px; }
     
     .guide-header {
-      background: linear-gradient(135deg, #FFB6A6, #9BCEC1);
+      background: linear-gradient(135deg, #E28B7B, #4F9D88);
       padding: 32px;
       border-radius: 20px;
       margin-bottom: 32px;
-      color: #2D4C44;
-      box-shadow: 0 10px 30px rgba(90, 50, 44, 0.15);
-      border: 3px solid #2D4C44;
+      color: #193630;
+      box-shadow: 0 10px 30px rgba(45, 25, 20, 0.2);
+      border: 3px solid #193630;
     }
 
     .guide-header h1 { font-size: 32px; font-weight: 800; margin-bottom: 8px; }
@@ -126,8 +126,8 @@ export function generatePrintableHtml(itinerary: Location[], lines: Line[]): str
     }
 
     .stat-badge {
-      background: #2D4C44;
-      color: #FFEBD3;
+      background: #193630;
+      color: #F5E1C8;
       padding: 6px 14px;
       border-radius: 20px;
       font-size: 12px;
@@ -141,8 +141,8 @@ export function generatePrintableHtml(itinerary: Location[], lines: Line[]): str
     .day-title {
       font-size: 20px;
       font-weight: 800;
-      background: #2D4C44;
-      color: #FFEBD3;
+      background: #193630;
+      color: #F5E1C8;
       display: inline-block;
       padding: 8px 20px;
       border-radius: 14px;
@@ -153,7 +153,7 @@ export function generatePrintableHtml(itinerary: Location[], lines: Line[]): str
     
     .pdf-card {
       background: #FFFFFF;
-      border: 2px solid #9BCEC1;
+      border: 2px solid #4F9D88;
       border-radius: 16px;
       overflow: hidden;
       box-shadow: 0 4px 14px rgba(0,0,0,0.06);
@@ -166,25 +166,25 @@ export function generatePrintableHtml(itinerary: Location[], lines: Line[]): str
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      border-bottom: 2px solid #9BCEC1;
+      border-bottom: 2px solid #4F9D88;
     }
 
     .pdf-card-body { padding: 18px; flex: 1; display: flex; flex-direction: column; }
-    .pdf-card-title { font-size: 17px; font-weight: 800; color: #2D4C44; margin-bottom: 6px; }
-    .pdf-card-meta { font-size: 12px; font-weight: 800; color: #2D4C44; margin-bottom: 10px; display: flex; gap: 12px; background: rgba(155,206,193,0.3); padding: 4px 10px; border-radius: 8px; width: fit-content; }
-    .pdf-card-desc { font-size: 13px; line-height: 1.5; color: #4A5568; margin-bottom: 12px; flex: 1; }
-    .pdf-card-coords { font-size: 11px; font-weight: 700; color: #2D4C44; opacity: 0.7; }
+    .pdf-card-title { font-size: 17px; font-weight: 800; color: #193630; margin-bottom: 6px; }
+    .pdf-card-meta { font-size: 12px; font-weight: 800; color: #193630; margin-bottom: 10px; display: flex; gap: 12px; background: rgba(79,157,136,0.3); padding: 4px 10px; border-radius: 8px; width: fit-content; }
+    .pdf-card-desc { font-size: 13px; line-height: 1.5; color: #3B211C; margin-bottom: 12px; flex: 1; }
+    .pdf-card-coords { font-size: 11px; font-weight: 700; color: #193630; opacity: 0.8; }
 
     .transport-bar {
       grid-column: 1 / -1;
-      background: rgba(255, 182, 166, 0.3);
-      border: 2px dashed #FFB6A6;
+      background: rgba(226, 139, 123, 0.25);
+      border: 2px dashed #E28B7B;
       padding: 10px 18px;
       border-radius: 12px;
       margin: 4px 0 12px 0;
       font-size: 13px;
       font-weight: 700;
-      color: #2D4C44;
+      color: #193630;
       display: flex;
       align-items: center;
       gap: 10px;
@@ -200,9 +200,9 @@ export function generatePrintableHtml(itinerary: Location[], lines: Line[]): str
     }
 
     .btn-print {
-      background: #2D4C44;
-      color: #FFEBD3;
-      border: 2px solid #FFEBD3;
+      background: #193630;
+      color: #F5E1C8;
+      border: 2px solid #F5E1C8;
       padding: 12px 24px;
       border-radius: 30px;
       font-size: 14px;

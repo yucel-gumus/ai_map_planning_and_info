@@ -31,9 +31,7 @@
     scrollbar-width: none;
     padding: var(--spacing-lg);
     border-radius: var(--radius-2xl);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    background-color: rgba(255, 235, 211, 0.92);
+    background-color: var(--color-dominant);
     border: 3px solid var(--color-secondary);
     box-shadow: var(--shadow-xl);
     position: relative;
@@ -65,7 +63,7 @@
 
 .card-active {
     border: 3px solid var(--color-accent) !important;
-    box-shadow: var(--shadow-xl), 0 0 0 4px rgba(155, 206, 193, 0.5) !important;
+    box-shadow: var(--shadow-xl), 0 0 0 4px rgba(79, 157, 136, 0.6) !important;
     transform: translateY(-4px) scale(1.03);
     background-color: var(--color-dominant) !important;
 }
@@ -237,7 +235,7 @@
 .card-action-btn.btn-visited.is-active {
     background-color: var(--color-accent);
     border-color: var(--color-accent);
-    color: #2D4C44;
+    color: var(--color-text-heading);
 }
 
 .card-action-btn.btn-exclude:hover,

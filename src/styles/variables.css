@@ -4,18 +4,18 @@
  */
 
 :root {
-    /* STRICT 60-30-10 COLOR PALETTE */
-    /* 60% Dominant (Sand / Warm Pastel Cream) */
-    --color-dominant: #FFEBD3;
-    --color-dominant-rgb: 255, 235, 211;
+    /* STRICT 60-30-10 COLOR PALETTE (Rich & Solid Tones) */
+    /* 60% Dominant (Warm Rich Sand) */
+    --color-dominant: #F5E1C8;
+    --color-dominant-rgb: 245, 225, 200;
     
-    /* 30% Secondary (Soft Coral / Warm Rose) */
-    --color-secondary: #FFB6A6;
-    --color-secondary-rgb: 255, 182, 166;
+    /* 30% Secondary (Deep Coral / Warm Terracotta) */
+    --color-secondary: #E28B7B;
+    --color-secondary-rgb: 226, 139, 123;
     
-    /* 10% Accent (Sage / Mint Teal) */
-    --color-accent: #9BCEC1;
-    --color-accent-rgb: 155, 206, 193;
+    /* 10% Accent (Vibrant Deep Sage / Teal) */
+    --color-accent: #4F9D88;
+    --color-accent-rgb: 79, 157, 136;
 
     /* Semantic Token Mappings */
     --color-bg: var(--color-dominant);
@@ -23,26 +23,26 @@
     --color-card-bg: var(--color-secondary);
     --color-card-border: var(--color-accent);
     
-    --color-text-primary: #5A322C; /* High-contrast warm coral shadow derived from #FFB6A6 / #9BCEC1 tones */
-    --color-text-heading: #2D4C44; /* High-contrast deep teal shade derived from #9BCEC1 */
-    --color-text-light: #804840;
+    --color-text-primary: #3B211C; /* Dark rich mocha for high contrast readability */
+    --color-text-heading: #193630; /* Deep forest teal for prominent titles */
+    --color-text-light: #58322B;
 
     --color-primary: var(--color-accent);
-    --color-primary-dark: #7CAAA0;
-    --color-primary-light: rgba(155, 206, 193, 0.25);
+    --color-primary-dark: #2E6C5C;
+    --color-primary-light: rgba(79, 157, 136, 0.4);
 
-    --color-white: #FFEBD3;
-    --color-black: #2D4C44;
-    --color-gray-50: rgba(255, 235, 211, 0.4);
-    --color-gray-100: rgba(255, 182, 166, 0.15);
-    --color-gray-200: rgba(255, 182, 166, 0.3);
+    --color-white: #F5E1C8;
+    --color-black: #193630;
+    --color-gray-50: #EDD6BC;
+    --color-gray-100: #EAB4AA;
+    --color-gray-200: #E28B7B;
     --color-gray-300: var(--color-secondary);
-    --color-gray-400: #E29B8C;
-    --color-gray-500: #804840;
-    --color-gray-600: #5A322C;
-    --color-gray-700: #462520;
-    --color-gray-800: #381C18;
-    --color-gray-900: #2D4C44;
+    --color-gray-400: #C96D5E;
+    --color-gray-500: #58322B;
+    --color-gray-600: #3B211C;
+    --color-gray-700: #2E1814;
+    --color-gray-800: #22110E;
+    --color-gray-900: #193630;
 
     /* Status mapped to palette */
     --color-error: var(--color-secondary);
