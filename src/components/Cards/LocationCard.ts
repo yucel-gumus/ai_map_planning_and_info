@@ -4,10 +4,9 @@
  */
 
 import { createElement } from '../../utils/dom.utils';
-import { generatePlaceholderImage } from '../../utils/transport.utils';
+import { generatePlaceholderImage, formatPosition } from '../../utils/transport.utils';
 import type { Location } from '../../types';
 import {
-    toggleVisitedLocation,
     isVisitedLocation,
     toggleExcludedLocation,
     isExcludedLocation
@@ -47,7 +46,15 @@ export function createLocationCard(
     card.setAttribute('data-name', location.name);
 
     const imageUrl = location.imageUrl || generatePlaceholderImage(location.name);
-    let cardContent = `<div class="card-image" style="background-image: url('${imageUrl}')"></div>`;
+    const lat = typeof location.position.lat === 'function' ? location.position.lat() : Number(location.position.lat);
+    const lng = typeof location.position.lng === 'function' ? location.position.lng() : Number(location.position.lng);
+
+    let cardContent = `
+      <div class="card-image card-image-loading" style="background-image: url('${imageUrl}')">
+        <button type="button" class="card-streetview-btn" title="360° Sokak Görünümü" data-action="streetview">
+          <i class="fas fa-street-view"></i>
+        </button>
+      </div>`;
 
     // Planner mode badges & Day badges
     if (isPlannerMode) {
@@ -77,7 +84,7 @@ export function createLocationCard(
       </div>` : ''}
 
       <div class="card-coordinates">
-        ${location.position.lat.toFixed(4)}, ${location.position.lng.toFixed(4)}
+        ${formatPosition(location.position)}
       </div>
     </div>
   `;
@@ -96,6 +103,17 @@ export function createLocationCard(
             card.classList.remove('card-status-excluded');
         }
         if (onActionChange) onActionChange();
+    });
+
+    const svBtn = card.querySelector('[data-action="streetview"]');
+    svBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const openSv = (window as unknown as Record<string, unknown>).__openStreetView as
+            | ((n: string, la: number, ln: number) => void)
+            | undefined;
+        if (openSv && !Number.isNaN(lat) && !Number.isNaN(lng)) {
+            openSv(location.name, lat, lng);
+        }
     });
 
     // Card select handler

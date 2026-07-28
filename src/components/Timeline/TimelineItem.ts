@@ -75,11 +75,14 @@ export function createTransportItem(
     transportType: string,
     transportIcon: string,
     routeName: string,
-    travelTime?: string
+    travelTime?: string,
+    distance?: string
 ): HTMLDivElement {
     const transportItem = createElement('div', {
         className: 'timeline-item transport-item'
     });
+
+    const meta = [travelTime, distance].filter(Boolean).join(' · ');
 
     transportItem.innerHTML = `
     <div class="timeline-time"></div>
@@ -91,7 +94,7 @@ export function createTransportItem(
       <div class="timeline-compact-main">
         <i class="fas fa-${transportIcon}"></i>
         <span class="timeline-title">${transportType || 'Seyahat'}</span>
-        ${travelTime ? `<span class="timeline-duration-badge">${travelTime}</span>` : ''}
+        ${meta ? `<span class="timeline-duration-badge">${meta}</span>` : ''}
       </div>
       <span class="transport-route-name">${routeName}</span>
     </div>

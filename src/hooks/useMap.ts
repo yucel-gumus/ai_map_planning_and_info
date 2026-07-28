@@ -1,6 +1,6 @@
-import * as L from 'leaflet';
+/// <reference types="@types/google.maps" />
 import type { Location, LocationArgs, LineArgs, Line } from '../types';
-import { getMapService, MapService } from '../services/map.service';
+import { getMapServiceAsync, MapService } from '../services/map.service';
 
 interface MapHookState {
     mapService: MapService | null;
@@ -12,8 +12,8 @@ const state: MapHookState = {
     activeCardIndex: 0,
 };
 
-export function initializeMap(containerId: string): void {
-    state.mapService = getMapService(containerId);
+export async function initializeMap(containerId: string): Promise<void> {
+    state.mapService = await getMapServiceAsync(containerId);
 }
 
 export function getMap(): MapService {
@@ -23,7 +23,7 @@ export function getMap(): MapService {
     return state.mapService;
 }
 
-export function getLeafletMap(): L.Map {
+export function getGoogleMap(): google.maps.Map {
     return getMap().getMap();
 }
 
@@ -35,11 +35,11 @@ export function getLines(): Line[] {
     return getMap().getLines();
 }
 
-export function getMarkers(): L.Marker[] {
+export function getMarkers(): google.maps.Marker[] {
     return getMap().getMarkers();
 }
 
-export function getBounds(): L.LatLngBounds {
+export function getBounds(): google.maps.LatLngBounds {
     return getMap().getBounds();
 }
 
@@ -59,7 +59,7 @@ export async function addRoute(args: LineArgs, isPlannerMode: boolean): Promise<
     return getMap().addLine(args, isPlannerMode);
 }
 
-export function panTo(position: L.LatLng): void {
+export function panTo(position: google.maps.LatLng): void {
     getMap().panTo(position);
 }
 

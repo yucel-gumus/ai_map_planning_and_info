@@ -1,23 +1,23 @@
+/// <reference types="@types/google.maps" />
+
 /**
  * Harita Planlama Uygulaması - TypeScript Type Definitions
  * @module types
  */
-
-import * as L from 'leaflet';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Location Types
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * Temel konum bilgisi interface'i
+ * Temel konum bilgisi interface'i (Google Maps Platform)
  */
 export interface Location {
     name: string;
     description: string;
-    position: L.LatLng;
-    popup: L.Popup;
-    marker?: L.Marker;
+    position: google.maps.LatLng;
+    popup?: google.maps.InfoWindow;
+    marker?: google.maps.Marker;
     time?: string;
     duration?: string;
     sequence?: number;
@@ -49,10 +49,12 @@ export interface LocationArgs {
  * Haritadaki çizgi/rota bilgisi
  */
 export interface Line {
-    poly: L.Polyline;
+    poly: google.maps.Polyline;
     name: string;
     transport?: string;
     travelTime?: string;
+    /** Google Directions distance text (e.g. "2,4 km") */
+    distance?: string;
 }
 
 /**
@@ -77,14 +79,14 @@ export interface LineArgs {
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * Harita state'i
+ * Harita state'i (Google Maps Platform)
  */
 export interface MapState {
-    points: L.LatLngExpression[];
-    markers: L.Marker[];
+    points: google.maps.LatLng[];
+    markers: google.maps.Marker[];
     lines: Line[];
     popUps: Location[];
-    bounds: L.LatLngBounds;
+    bounds: google.maps.LatLngBounds;
     activeCardIndex: number;
 }
 
@@ -92,11 +94,11 @@ export interface MapState {
  * Harita başlatma seçenekleri
  */
 export interface MapOptions {
-    center: L.LatLngExpression;
+    center: google.maps.LatLngLiteral;
     zoom: number;
     zoomControl: boolean;
     minZoom?: number;
-    maxZoom: number;
+    maxZoom?: number;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -120,7 +122,7 @@ export interface TimelineItem {
     time?: string;
     duration?: string;
     sequence?: number;
-    position: L.LatLng;
+    position: google.maps.LatLng;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

@@ -85,8 +85,23 @@
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
-    transition: transform var(--transition-normal);
+    transition: transform var(--transition-normal), filter 0.4s ease;
     border-bottom: 2px solid var(--color-secondary);
+    overflow: hidden;
+}
+
+.card-image-loading {
+    filter: saturate(0.7) brightness(0.95);
+}
+
+.card-image-loaded {
+    filter: none;
+    animation: cardImageReveal 0.45s ease;
+}
+
+@keyframes cardImageReveal {
+    from { opacity: 0.65; transform: scale(1.04); }
+    to { opacity: 1; transform: scale(1); }
 }
 
 .location-card:hover .card-image {
@@ -101,6 +116,33 @@
     right: 0;
     height: 40%;
     background: linear-gradient(to top, var(--color-dominant), transparent);
+    pointer-events: none;
+}
+
+.card-streetview-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 2;
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    border: 1.5px solid var(--color-accent);
+    background: rgba(25, 54, 48, 0.88);
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.card-streetview-btn:hover {
+    background: var(--color-accent);
+    color: var(--color-dominant);
+    transform: scale(1.08);
 }
 
 /* Card Body Content (High Contrast Text) */

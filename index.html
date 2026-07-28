@@ -12,8 +12,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="/src/styles/index.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
@@ -56,10 +54,23 @@
       <div class="loading-text">KENSAI Araştırıyor ...</div>
     </div>
   </div>
-  <div class="planner-actions-bar" id="planner-actions-bar">
+  <div class="planner-actions-bar" id="planner-actions-bar" style="display: none;">
     <button id="export-plan" class="export-button"><i class="fas fa-download"></i> Dışa Aktar</button>
     <div id="timeline-replan-bar" class="timeline-replan-bar" style="display: none;"></div>
   </div>
+
+  <div class="streetview-modal" id="streetview-modal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="streetview-title">
+    <div class="streetview-modal-content">
+      <div class="streetview-modal-header">
+        <h2 id="streetview-title"><i class="fas fa-street-view"></i> 360° Google Street View</h2>
+        <button class="streetview-close-button" id="streetview-close" aria-label="Kapat" type="button"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="streetview-modal-body">
+        <div id="streetview-pano" style="width: 100%; height: min(70vh, 520px); border-radius: 12px; overflow: hidden;"></div>
+      </div>
+    </div>
+  </div>
+
   <div class="help-modal" id="help-modal">
     <div class="help-modal-content">
       <div class="help-modal-header">
@@ -105,7 +116,7 @@
 
         <div class="help-tip-bar">
           <i class="fas fa-lightbulb"></i>
-          <span>Konum kartlarına veya timeline adımlarına tıklayarak haritada anında odaklanabilirsiniz.</span>
+          <span>Kartlardaki 360° butonu Street View açar; rota çizgileri Google Directions ile gerçek yolları ve seyahat sürelerini gösterir. Mekan fotoğrafları Google Places Photo API’den gelir.</span>
         </div>
 
       </div>

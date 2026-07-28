@@ -3,17 +3,17 @@
  * @module components/Map/MapContainer
  */
 
-import { initializeMap, getLeafletMap } from '../../hooks/useMap';
+import { initializeMap, getGoogleMap } from '../../hooks/useMap';
 
 /**
- * Map container'ı başlatır
+ * Map container'ı başlatır (Google Maps API)
  * @param containerId - Container element ID (varsayılan: 'map')
  */
-export function initMapContainer(containerId: string = 'map'): void {
-    initializeMap(containerId);
+export async function initMapContainer(containerId: string = 'map'): Promise<void> {
+    await initializeMap(containerId);
 }
 
 /**
- * Map container'ı export eder
+ * Google Maps instance'ını export eder
  */
-export { getLeafletMap };
+export { getGoogleMap };

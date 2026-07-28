@@ -12,7 +12,6 @@ import {
     clearDayPlan,
     sortDayPlanItinerary,
     setNoticeMessage,
-    getExcludedLocations
 } from './hooks/usePlanner';
 import { resetTimeline } from './hooks/useTimeline';
 import { getAIService } from './services/ai.service';
@@ -97,7 +96,7 @@ function handleCardHighlight(index: number): void {
     highlightCard(index);
 }
 
-export function initApp(): void {
+export async function initApp(): Promise<void> {
     if (isInitialized) {
         console.warn('App zaten başlatılmış');
         return;
@@ -105,7 +104,7 @@ export function initApp(): void {
 
     try {
         getAIService();
-        initMapContainer('map');
+        await initMapContainer('map');
         initSearchBar(handleSearch, handleReset);
         initModeToggle();
         initTimeline(handleCardHighlight, handleRePlan);
@@ -113,7 +112,7 @@ export function initApp(): void {
         initHelpModal();
 
         isInitialized = true;
-        console.log('App başarıyla başlatıldı');
+        console.log('App (Google Maps Platform) başarıyla başlatıldı');
     } catch (error) {
         console.error('App başlatma hatası:', error);
         showError(error instanceof Error ? error.message : 'Uygulama başlatılamadı');

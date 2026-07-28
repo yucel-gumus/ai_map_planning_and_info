@@ -273,3 +273,114 @@
         bottom: 96px;
     }
 }
+
+/* 360° Google Street View Modal */
+.streetview-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(25, 54, 48, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: var(--z-modal);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-lg);
+}
+
+.streetview-modal-content {
+    background: var(--color-secondary);
+    border: 3px solid var(--color-accent);
+    border-radius: var(--radius-2xl);
+    max-width: 860px;
+    width: 100%;
+    overflow: hidden;
+    box-shadow: var(--shadow-xl);
+    animation: modalPopIn var(--transition-spring);
+}
+
+.streetview-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) var(--spacing-xl);
+    background: var(--color-accent);
+    color: var(--color-dominant);
+}
+
+.streetview-modal-header h2 {
+    margin: 0;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-extra-bold);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.streetview-close-button {
+    background: var(--color-dominant);
+    border: 2px solid var(--color-secondary);
+    color: var(--color-accent);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    cursor: pointer;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-spring);
+}
+
+.streetview-close-button:hover {
+    transform: scale(1.1);
+    background-color: var(--color-secondary);
+    color: var(--color-dominant);
+}
+
+.streetview-modal-body {
+    padding: var(--spacing-md);
+    background-color: var(--color-dominant);
+}
+
+.streetview-modal.visible {
+    display: flex !important;
+}
+
+.streetview-unavailable {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 280px;
+    color: var(--color-accent);
+    text-align: center;
+    padding: var(--spacing-xl);
+}
+
+.streetview-unavailable i {
+    font-size: 2rem;
+    opacity: 0.85;
+}
+
+.streetview-unavailable p {
+    margin: 0;
+    color: var(--color-text-primary);
+    font-weight: 600;
+}
+
+.streetview-hint {
+    font-size: 0.85rem;
+    opacity: 0.75;
+    font-weight: 500 !important;
+}
+
+.streetview-loading i {
+    font-size: 1.75rem;
+}

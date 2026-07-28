@@ -5,6 +5,7 @@
 
 import type { Location, Line } from '../types';
 import { getTransportIcon } from '../constants/map.constants';
+import { formatPosition } from './transport.utils';
 
 /**
  * Downloads plain text file
@@ -64,7 +65,7 @@ export function generatePrintableHtml(itinerary: Location[], lines: Line[]): str
                   ${item.duration ? `<span><i class="fas fa-hourglass-half"></i> ${item.duration}</span>` : ''}
                 </div>
                 <div class="pdf-card-desc">${item.description}</div>
-                <div class="pdf-card-coords"><i class="fas fa-location-dot"></i> ${item.position.lat.toFixed(4)}, ${item.position.lng.toFixed(4)}</div>
+                <div class="pdf-card-coords"><i class="fas fa-location-dot"></i> ${formatPosition(item.position)}</div>
               </div>
             </div>
             `;
@@ -75,13 +76,17 @@ export function generatePrintableHtml(itinerary: Location[], lines: Line[]): str
                 const connectingLine = lines.find(
                     l => l.name.includes(item.name) || l.name.includes(nextItem.name)
                 );
-                if (connectingLine && (connectingLine.transport || connectingLine.travelTime)) {
+                if (connectingLine && (connectingLine.transport || connectingLine.travelTime || connectingLine.distance)) {
                     const icon = getTransportIcon(connectingLine.transport || 'travel');
+                    const meta = [
+                        connectingLine.travelTime,
+                        connectingLine.distance,
+                    ].filter(Boolean).join(' · ');
                     daysHtml += `
                     <div class="transport-bar">
                       <i class="fas fa-${icon}"></i>
                       <span>${connectingLine.transport || 'Seyahat'}: ${connectingLine.name}</span>
-                      ${connectingLine.travelTime ? `<strong>(${connectingLine.travelTime})</strong>` : ''}
+                      ${meta ? `<strong>(${meta})</strong>` : ''}
                     </div>
                     `;
                 }

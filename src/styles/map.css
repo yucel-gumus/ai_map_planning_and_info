@@ -1,6 +1,6 @@
 /**
- * Map Container & Leaflet Styling
- * @description Map styling and tile palette filtering strictly in 60-30-10 palette
+ * Map Container & Google Maps Platform Styling
+ * @description Map styling strictly in 60-30-10 palette
  */
 
 /* Map Container */
@@ -29,11 +29,6 @@
     background-color: var(--color-dominant);
 }
 
-/* Map Tile Palette Harmonization Filter */
-.leaflet-tile {
-    filter: sepia(0.32) hue-rotate(330deg) saturate(1.5) contrast(1.08) brightness(0.94) !important;
-}
-
 /* Map Overlay Backdrop */
 .map-overlay {
     position: fixed;
@@ -51,114 +46,114 @@
     display: block;
 }
 
-/* Leaflet Custom Popups in 60-30-10 Palette */
-.leaflet-popup-content-wrapper {
-    background: var(--color-dominant) !important;
-    color: var(--color-text-primary) !important;
-    box-shadow: var(--shadow-xl) !important;
+/* Google Maps InfoWindow Styling */
+.gm-style-iw {
+    background-color: var(--color-dominant) !important;
     border-radius: var(--radius-lg) !important;
     padding: 0 !important;
-    border: 3px solid var(--color-secondary) !important;
-}
-
-.leaflet-popup-content {
-    margin: 0 !important;
-    line-height: var(--line-height-normal) !important;
-    font-size: var(--font-size-base) !important;
-    min-width: 220px !important;
-    font-family: var(--font-family) !important;
-}
-
-.leaflet-popup-tip {
-    background: var(--color-dominant) !important;
     border: 2px solid var(--color-secondary) !important;
+    box-shadow: var(--shadow-xl) !important;
 }
 
+.gm-style-iw-c {
+    background-color: var(--color-dominant) !important;
+    padding: 0 !important;
+    border-radius: var(--radius-lg) !important;
+}
+
+.gm-style-iw-tc::after {
+    background-color: var(--color-dominant) !important;
+}
+
+.gm-style .gm-style-iw-d {
+    overflow: hidden !important;
+}
+
+/* Rich popup bubble with Places photo */
 .popup-bubble {
-    padding: var(--spacing-md) var(--spacing-lg);
-    background-color: var(--color-dominant);
-    border-radius: var(--radius-lg);
+    padding: 0;
+    color: #2A3A38;
+    width: 260px;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    overflow: hidden;
+    border-radius: 12px;
 }
 
-.popup-bubble b {
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-md);
-    color: var(--color-text-heading);
+.popup-photo {
+    width: 100%;
+    height: 120px;
+    background-size: cover;
+    background-position: center;
+    background-color: #193630;
+    border-bottom: 2px solid #4F9D88;
 }
 
-.popup-time-info {
-    margin-top: 6px;
-    font-size: 13px;
-    font-weight: var(--font-weight-bold);
-    color: var(--color-accent);
-}
-
-/* Custom Marker Pins in HTML DivIcon */
-.custom-map-marker {
-    background: transparent;
-    border: none;
-}
-
-.marker-pin-wrapper {
+.popup-photo-placeholder {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 38px;
-    height: 38px;
-    background-color: var(--color-accent);
-    color: var(--color-dominant);
-    border: 3px solid var(--color-secondary);
-    border-radius: var(--radius-full);
-    box-shadow: var(--shadow-md), var(--shadow-accent);
-    font-weight: var(--font-weight-extra-bold);
-    font-size: var(--font-size-sm);
-    transition: all var(--transition-spring);
+    color: #F5E1C8;
+    font-size: 28px;
+    opacity: 0.7;
+}
+
+.popup-body {
+    padding: 10px 12px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.popup-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: #193630;
+    line-height: 1.25;
+}
+
+.popup-desc {
+    font-size: 12px;
+    line-height: 1.4;
+    color: #2A3A38;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.popup-time-info {
+    font-size: 11px;
+    font-weight: 600;
+    color: #4F9D88;
+}
+
+.popup-rating {
+    font-size: 12px;
+    font-weight: 700;
+    color: #E28B7B;
+}
+
+.popup-actions {
+    margin-top: 4px;
+}
+
+.btn-pano-trigger {
+    background: #193630;
+    color: #F5E1C8;
+    border: 1px solid #4F9D88;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
     cursor: pointer;
+    width: 100%;
+    transition: background 0.2s ease, transform 0.15s ease;
 }
 
-.marker-pin-wrapper:hover {
-    transform: scale(1.25) translateY(-4px);
-    background-color: var(--color-dominant);
-    color: var(--color-accent);
-    border-color: var(--color-accent);
-    box-shadow: var(--shadow-xl);
-}
-
-/* Leaflet Z-Index Adjustments */
-.leaflet-pane {
-    z-index: 1 !important;
-}
-
-.leaflet-tile-pane {
-    z-index: 1 !important;
-}
-
-.leaflet-overlay-pane {
-    z-index: 2 !important;
-}
-
-.leaflet-shadow-pane {
-    z-index: 3 !important;
-}
-
-.leaflet-marker-pane {
-    z-index: 4 !important;
-}
-
-.leaflet-tooltip-pane {
-    z-index: 5 !important;
-}
-
-.leaflet-popup-pane {
-    z-index: 6 !important;
-}
-
-.leaflet-map-pane {
-    z-index: 1 !important;
-}
-
-.leaflet-control-container {
-    z-index: var(--z-map-controls) !important;
+.btn-pano-trigger:hover {
+    background: #4F9D88;
+    color: #193630;
+    transform: translateY(-1px);
 }
 
 /* Route Animations */

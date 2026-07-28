@@ -36,6 +36,37 @@ export function generatePlaceholderImage(locationName: string): string {
 }
 
 /**
+ * Safely extracts latitude number from Google Maps LatLng or raw object/number
+ */
+export function getLat(position: any): number {
+    if (!position) return 0;
+    if (typeof position.lat === 'function') {
+        return position.lat();
+    }
+    return Number(position.lat || 0);
+}
+
+/**
+ * Safely extracts longitude number from Google Maps LatLng or raw object/number
+ */
+export function getLng(position: any): number {
+    if (!position) return 0;
+    if (typeof position.lng === 'function') {
+        return position.lng();
+    }
+    return Number(position.lng || 0);
+}
+
+/**
+ * Format position coordinates
+ */
+export function formatPosition(position: any, precision: number = 4): string {
+    const lat = getLat(position);
+    const lng = getLng(position);
+    return `${lat.toFixed(precision)}, ${lng.toFixed(precision)}`;
+}
+
+/**
  * Koordinatları formatlar
  */
 export function formatCoordinates(lat: number, lng: number, precision: number = 5): string {

@@ -125,7 +125,8 @@ export function toggleTimeline(): void {
  */
 function adjustInterfaceForTimeline(): void {
     const bounds = getBounds();
-    if (bounds && bounds.isValid()) {
+    // Google Maps LatLngBounds: use isEmpty() (Leaflet had isValid())
+    if (bounds && !bounds.isEmpty()) {
         setTimeout(() => {
             fitBounds();
         }, UI_TIMING.RESIZE_INVALIDATE_DELAY);

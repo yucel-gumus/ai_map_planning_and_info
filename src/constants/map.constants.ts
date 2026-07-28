@@ -13,22 +13,54 @@ import type { MapOptions, TransportIconMap } from '../types';
  * Varsayılan harita başlatma seçenekleri
  */
 export const DEFAULT_MAP_OPTIONS: MapOptions = {
-    center: [39.9334, 32.8597], // Ankara, Türkiye
+    center: { lat: 39.9334, lng: 32.8597 }, // Ankara, Türkiye
     zoom: 6,
     zoomControl: false,
-    minZoom: 5,  // Sınırlı uzaklaştırma (çok fazla uzaklaşmayı engeller)
-    maxZoom: 19, // Derin yakınlaştırma (sokak ve bina seviyesine kadar yakınlaşır)
+    minZoom: 3,
+    maxZoom: 20,
 };
 
 /**
- * OpenStreetMap tile layer URL
+ * Google Maps API Key
  */
-export const TILE_LAYER_URL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+export const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';
 
 /**
- * Tile layer attribution
+ * Desteklenen harita katmanları (OpenStreetMap & Google Maps Platform)
  */
-export const TILE_LAYER_ATTRIBUTION = '';
+export const TILE_LAYERS = {
+    googleHybrid: {
+        name: 'Google Hibrit',
+        url: `https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}${GOOGLE_MAPS_API_KEY ? `&key=${GOOGLE_MAPS_API_KEY}` : ''}`,
+        attribution: '&copy; Google Maps Hybrid',
+    },
+    googleRoadmap: {
+        name: 'Google Haritası',
+        url: `https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}${GOOGLE_MAPS_API_KEY ? `&key=${GOOGLE_MAPS_API_KEY}` : ''}`,
+        attribution: '&copy; Google Maps',
+    },
+    googleSatellite: {
+        name: 'Google Uydu',
+        url: `https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}${GOOGLE_MAPS_API_KEY ? `&key=${GOOGLE_MAPS_API_KEY}` : ''}`,
+        attribution: '&copy; Google Maps Satellite',
+    },
+    googleTerrain: {
+        name: 'Google Arazi',
+        url: `https://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}${GOOGLE_MAPS_API_KEY ? `&key=${GOOGLE_MAPS_API_KEY}` : ''}`,
+        attribution: '&copy; Google Maps Terrain',
+    },
+    openstreetmap: {
+        name: 'OpenStreetMap',
+        url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        attribution: '&copy; OpenStreetMap contributors',
+    },
+};
+
+/**
+ * Varsayılan harita tile URL ve attribution
+ */
+export const TILE_LAYER_URL = TILE_LAYERS.googleHybrid.url;
+export const TILE_LAYER_ATTRIBUTION = TILE_LAYERS.googleHybrid.attribution;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Polyline Options

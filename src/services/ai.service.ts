@@ -1,5 +1,6 @@
 import type { LocationArgs, LineArgs, GenerateResult } from '../types';
 import { SYSTEM_INSTRUCTIONS, API_URL } from '../constants';
+import { optimizeItineraryLocations, generateRouteLinesForItinerary } from '../utils';
 
 interface FunctionCallHandler {
     onLocation: (args: LocationArgs) => Promise<void>;
@@ -92,13 +93,35 @@ export class AIService {
             let hasResults = false;
 
             if (data.functionCalls && data.functionCalls.length > 0) {
+                const rawLocations: LocationArgs[] = [];
+                const rawLines: LineArgs[] = [];
+
                 for (const fn of data.functionCalls) {
                     if (fn.name === 'location') {
-                        await handlers.onLocation(fn.args as unknown as LocationArgs);
+                        rawLocations.push(fn.args as unknown as LocationArgs);
+                    } else if (fn.name === 'line') {
+                        rawLines.push(fn.args as unknown as LineArgs);
+                    }
+                }
+
+                if (rawLocations.length > 0) {
+                    // Apply route optimization: micro-cluster merging + intra-day TSP order
+                    const optimizedLocations = isPlannerMode
+                        ? optimizeItineraryLocations(rawLocations)
+                        : rawLocations;
+
+                    // Generate clean, accurate route lines for consecutive sequence points
+                    const optimizedLines = isPlannerMode
+                        ? generateRouteLinesForItinerary(optimizedLocations, rawLines)
+                        : rawLines;
+
+                    for (const locArgs of optimizedLocations) {
+                        await handlers.onLocation(locArgs);
                         hasResults = true;
                     }
-                    if (fn.name === 'line') {
-                        await handlers.onLine(fn.args as unknown as LineArgs);
+
+                    for (const lineArgs of optimizedLines) {
+                        await handlers.onLine(lineArgs);
                         hasResults = true;
                     }
                 }

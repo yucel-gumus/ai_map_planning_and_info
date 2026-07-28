@@ -11,6 +11,15 @@ export default defineConfig(({ mode }) => {
 
   const apiKey = env.GATEWAY_CLIENT_API_KEY || env.CLIENT_API_KEY || '';
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const withGatewayAuth = (proxy: any) => {
+    proxy.on('proxyReq', (proxyReq: { setHeader: (k: string, v: string) => void }) => {
+      if (apiKey) {
+        proxyReq.setHeader('X-API-Key', apiKey);
+      }
+    });
+  };
+
   return {
     resolve: {
       alias: {
@@ -19,17 +28,25 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       proxy: {
+        // AI map generation
         '/api/generate-map': {
           target: gatewayTarget,
           changeOrigin: true,
           secure: true,
-          configure: (proxy) => {
-            proxy.on('proxyReq', (proxyReq) => {
-              if (apiKey) {
-                proxyReq.setHeader('X-API-Key', apiKey);
-              }
-            });
-          },
+          configure: withGatewayAuth,
+        },
+        // Places photo + future Google Maps backend endpoints
+        '/api/places': {
+          target: gatewayTarget,
+          changeOrigin: true,
+          secure: true,
+          configure: withGatewayAuth,
+        },
+        '/api/maps': {
+          target: gatewayTarget,
+          changeOrigin: true,
+          secure: true,
+          configure: withGatewayAuth,
         },
       },
     },

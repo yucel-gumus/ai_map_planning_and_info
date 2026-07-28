@@ -150,6 +150,8 @@ export function initSearchBar(
     // Event listeners
     if (promptInput) {
         on(promptInput, 'keydown', handleKeyDown);
+        // Note: google.maps.places.Autocomplete requires a real <input>, not <textarea>.
+        // Free-text AI prompts stay on textarea — do not attach Autocomplete here.
     }
 
     if (generateButton) {

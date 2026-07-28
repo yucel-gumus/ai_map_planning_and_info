@@ -27,6 +27,14 @@ export const SYSTEM_INSTRUCTIONS = `## İnteraktif Harita Gezgini için Gelişmi
      - Her gün için mantıklı ve birbirine yakın konumlardan oluşan 3-5 ana durak ekle.
      - Her konum için 'sequence' (günün sırası: 1, 2, 3), 'time' (örn: "09:00", "14:30") ve 'duration' (örn: "1.5 saat") değerlerini eksiksiz sağla.
      - Her günün son durağından ertesi güne geçiş yapmadan, sadece gün içi durakları 'line' ile bağla.
+
+   * **Coğrafi Kümeleme ve Rota Optimizasyonu (ÇOK ÖNEMLİ):**
+     - **GÜNLÜK BÖLGE KÜMELEMESİ:** Günlük plan oluştururken haritadaki mekanları coğrafi kümelere (geographical clusters) ayır. Aynı güne verilen mekanlar mutlaka birbirine yakın aynı bölgede (örn: 1. Gün Merkez/Doğu, 2. Gün Güney Koyları, 3. Gün Batı Ucu) olmalıdır. Farklı günlerde aynı mahalleye zikzak çekip geri dönme!
+     - **YAKIN MEKANLARI BİRLEŞTİRME:** Aynı köyde veya yürüme mesafesinde olan mekanları (Örn: Eski Datça ile Can Yücel Evi) KESİNLİKLE aynı günün ardışık durakları yap; farklı günlere dağıtma.
+     - **GÜN İÇİ EN KISA ROTA (TSP):** Durakların 'sequence' sıralaması (1, 2, 3...) coğrafi olarak en kısa mesafeli ve doğrusal hat çizecek şekilde yapılmalıdır. Zikzak çizen rota oluşturma.
+     - **DOĞRU ULAŞIM ÇİZGİLERİ (line):** 'line' çağrılarını YALNIZCA aynı günün ardışık durakları arasında oluştur (Day 1 Seq 1 -> Day 1 Seq 2 -> Day 1 Seq 3). Günler arası çizgi OLUŞTURMA.
+     - **KRONOLOJİK ZAMAN UYUMU:** Durak 'time' saatleri sequence sırasıyla uyumlu olarak artan sırada olsun (örn: 09:30, 11:30, 15:00, 18:00).
+
    * **Kapasite ve Süre Uyarması:**
      - Kullanıcı küçük bir yer için çok uzun gün sayısı isterse (örn: "Amasra 5 günlük plan"), ama o destinasyon için gerçekçi süre en fazla 2-3 gün ise:
      - Metin yanıtında (text output) kibarca bilgilendirme uyarısı ver: *"Bu destinasyon için en ideal gezi süresi X gündür. X günlük dolu dolu ve keyifli bir program hazırladım."*
@@ -36,7 +44,7 @@ export const SYSTEM_INSTRUCTIONS = `## İnteraktif Harita Gezgini için Gelişmi
 
 **Çıktı Formatı:**
 * Her konum için: location(name, description, lat, lng, day, sequence, time, duration, imageUrl)
-  - 'imageUrl' parametresinde o mekana ait gerçek / kaliteli bir web fotoğrafı bağlantısı (Unsplash, Wikimedia veya açık kaynak CDN resmi URL'si, örn: "https://images.unsplash.com/photo-...") sağla.
+  - 'imageUrl' parametresinde rastgele veya sahte Unsplash bağlantıları ÜRETME. Görseller Google Maps Places & Street View API tarafından koordinat bazlı otomatik çözümlenecektir.
 * Her bağlantı için: line(name, start, end, transport, travelTime)
 * Yanıt dilin her zaman Türkçe olsun.`;
 
