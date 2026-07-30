@@ -21,23 +21,30 @@ export function setupMapsNetworkInterceptor() {
       urlStr = urlStr.replace('https://maps.googleapis.com/maps/api', PROXY_TARGET);
       urlStr = urlStr.replace('https://maps.googleapis.com', PROXY_TARGET);
 
-      const headers = new Headers(init?.headers);
-      headers.delete('x-goog-api-key');
-
-      const newInit: RequestInit = {
-        ...init,
-        headers,
-      };
-
       if (typeof input === 'string') {
-        input = urlStr;
-      } else if (input instanceof URL) {
-        input = new URL(urlStr);
-      } else {
-        input = new Request(urlStr, newInit);
+        const headers = new Headers(init?.headers);
+        headers.delete('x-goog-api-key');
+        return originalFetch.call(this, urlStr, { ...init, headers });
       }
 
-      return originalFetch.call(this, input, newInit);
+      if (input instanceof URL) {
+        const headers = new Headers(init?.headers);
+        headers.delete('x-goog-api-key');
+        return originalFetch.call(this, new URL(urlStr), { ...init, headers });
+      }
+
+      if (typeof Request !== 'undefined' && input instanceof Request) {
+        const newReq = new Request(urlStr, input);
+        newReq.headers.delete('x-goog-api-key');
+
+        let cleanedInit = init;
+        if (init?.headers) {
+          const headers = new Headers(init.headers);
+          headers.delete('x-goog-api-key');
+          cleanedInit = { ...init, headers };
+        }
+        return originalFetch.call(this, newReq, cleanedInit);
+      }
     }
 
     return originalFetch.call(this, input, init);
