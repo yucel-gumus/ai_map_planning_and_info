@@ -190,7 +190,7 @@ export class MapService {
             heading: 0,
             scaleControl: true,
             gestureHandling: 'greedy',
-            clickableIcons: true,
+            clickableIcons: false,
         };
 
         return new google.maps.Map(container, mapOptions);
