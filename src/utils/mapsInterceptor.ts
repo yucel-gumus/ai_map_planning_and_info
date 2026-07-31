@@ -18,9 +18,15 @@ export function setupMapsNetworkInterceptor() {
     let urlStr = typeof input === 'string' ? input : input instanceof URL ? input.toString() : input.url;
 
     if (urlStr.includes('maps.googleapis.com')) {
-      // Pass-through internal JS SDK gRPC calls ($rpc) & telemetry (gen_204) directly to Google.
-      // These internal Web Components use native browser gRPC streams and Origin verification.
-      if (urlStr.includes('$rpc') || urlStr.includes('gen_204')) {
+      // Pass-through JS SDK script loader (/js), v3 modules (/maps-api-v3/), gRPC ($rpc) & telemetry (gen_204) directly to Google.
+      // Modifying or proxying the core JS SDK bundle URLs causes Google's Auth service to reject with ApiProjectMapError.
+      if (
+        urlStr.includes('/maps/api/js') ||
+        urlStr.includes('/maps-api-v3/') ||
+        urlStr.includes('gstatic.com') ||
+        urlStr.includes('$rpc') ||
+        urlStr.includes('gen_204')
+      ) {
         return originalFetch.call(this, input, init);
       }
 
@@ -71,7 +77,13 @@ export function setupMapsNetworkInterceptor() {
     let urlStr = typeof url === 'string' ? url : url.toString();
 
     if (urlStr.includes('maps.googleapis.com')) {
-      if (urlStr.includes('$rpc') || urlStr.includes('gen_204')) {
+      if (
+        urlStr.includes('/maps/api/js') ||
+        urlStr.includes('/maps-api-v3/') ||
+        urlStr.includes('gstatic.com') ||
+        urlStr.includes('$rpc') ||
+        urlStr.includes('gen_204')
+      ) {
         return originalOpen.call(this, method, url, async, username, password);
       }
       urlStr = urlStr.replace('https://maps.googleapis.com/maps/api', PROXY_TARGET);
