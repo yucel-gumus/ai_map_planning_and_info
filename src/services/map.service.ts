@@ -30,30 +30,44 @@ export function loadGoogleMapsScript(): Promise<void> {
         return googleMapsScriptPromise;
     }
 
-    googleMapsScriptPromise = new Promise((resolve, reject) => {
+    googleMapsScriptPromise = (async () => {
         const existingScript = document.querySelector('script[src*="maps.googleapis.com/maps/api/js"]');
         if (existingScript) {
-            existingScript.addEventListener('load', () => resolve());
-            existingScript.addEventListener('error', (e) => reject(e));
-            return;
+            return new Promise<void>((resolve, reject) => {
+                existingScript.addEventListener('load', () => resolve());
+                existingScript.addEventListener('error', (e) => reject(e));
+            });
         }
 
-        if (!GOOGLE_MAPS_API_KEY) {
-            reject(new Error('VITE_GOOGLE_MAPS_API_KEY tanımlı değil'));
-            return;
+        let keyToUse = GOOGLE_MAPS_API_KEY;
+        if (!keyToUse) {
+            try {
+                const bffRes = await fetch('https://pages-bff.vercel.app/api/maps/config');
+                const data = await bffRes.json();
+                if (data?.mapsApiKey) {
+                    keyToUse = data.mapsApiKey;
+                }
+            } catch (err) {
+                console.warn('BFF maps config fetch failed, using fallback key if any', err);
+            }
         }
 
-        const script = document.createElement('script');
-        // places + geometry + drawing-ready libraries
-        script.src =
-            `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}` +
-            `&libraries=places,geometry&language=tr&region=TR&v=weekly`;
-        script.async = true;
-        script.defer = true;
-        script.onload = () => resolve();
-        script.onerror = (err) => reject(err);
-        document.head.appendChild(script);
-    });
+        if (!keyToUse) {
+            throw new Error('Google Maps API key tanımlı değil');
+        }
+
+        return new Promise<void>((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src =
+                `https://maps.googleapis.com/maps/api/js?key=${keyToUse}` +
+                `&libraries=places,geometry&language=tr&region=TR&v=weekly`;
+            script.async = true;
+            script.defer = true;
+            script.onload = () => resolve();
+            script.onerror = (err) => reject(err);
+            document.head.appendChild(script);
+        });
+    })();
 
     return googleMapsScriptPromise;
 }
