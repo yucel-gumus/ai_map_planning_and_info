@@ -192,7 +192,6 @@ export class MapService {
 
     private initializeMap(container: HTMLElement): google.maps.Map {
         const mapOptions: google.maps.MapOptions = {
-            mapId: globalFetchedMapId || GOOGLE_MAPS_MAP_ID,
             center: DEFAULT_MAP_OPTIONS.center,
             zoom: DEFAULT_MAP_OPTIONS.zoom,
             mapTypeId: google.maps.MapTypeId.TERRAIN,
