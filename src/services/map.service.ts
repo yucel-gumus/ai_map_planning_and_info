@@ -10,7 +10,6 @@ import type { Location, LocationArgs, LineArgs, Line } from '../types';
 import {
     DEFAULT_MAP_OPTIONS,
     GOOGLE_MAPS_API_KEY,
-    GOOGLE_MAPS_MAP_ID,
     DEFAULT_POLYLINE_COLOR,
     PLANNER_POLYLINE_COLOR
 } from '../constants';
