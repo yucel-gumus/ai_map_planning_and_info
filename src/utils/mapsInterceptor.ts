@@ -66,6 +66,7 @@ export function setupMapsNetworkInterceptor() {
   // 2. Intercept XMLHttpRequest
   const originalOpen = XMLHttpRequest.prototype.open;
   const originalSetRequestHeader = XMLHttpRequest.prototype.setRequestHeader;
+  const xhrUrlMap = new WeakMap<XMLHttpRequest, string>();
 
   XMLHttpRequest.prototype.open = function (
     this: XMLHttpRequest,
@@ -76,6 +77,7 @@ export function setupMapsNetworkInterceptor() {
     password?: string | null
   ) {
     let urlStr = typeof url === 'string' ? url : url.toString();
+    xhrUrlMap.set(this, urlStr);
 
     if (urlStr.includes('maps.googleapis.com')) {
       if (
@@ -100,8 +102,17 @@ export function setupMapsNetworkInterceptor() {
     header: string,
     value: string
   ) {
-    if (header.toLowerCase() === 'x-goog-api-key') {
-      // Strip x-goog-api-key header from browser network calls
+    const url = xhrUrlMap.get(this) || '';
+    const isPassThrough = 
+      url.includes('/maps/api/js') ||
+      url.includes('/maps-api-v3/') ||
+      url.includes('gstatic.com') ||
+      url.includes('$rpc') ||
+      url.includes('gen_204') ||
+      url.includes('/mapsjs/');
+
+    if (header.toLowerCase() === 'x-goog-api-key' && !isPassThrough) {
+      // Strip x-goog-api-key header from proxied browser network calls
       return;
     }
     return originalSetRequestHeader.call(this, header, value);
