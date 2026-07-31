@@ -26,6 +26,11 @@ export const DEFAULT_MAP_OPTIONS: MapOptions = {
 export const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';
 
 /**
+ * Google Maps Map ID
+ */
+export const GOOGLE_MAPS_MAP_ID = import.meta.env.VITE_GOOGLE_MAPS_MAP_ID || 'DEMO_MAP_ID';
+
+/**
  * Desteklenen harita katmanları (OpenStreetMap & Google Maps Platform)
  */
 export const TILE_LAYERS = {

@@ -10,6 +10,7 @@ import type { Location, LocationArgs, LineArgs, Line } from '../types';
 import {
     DEFAULT_MAP_OPTIONS,
     GOOGLE_MAPS_API_KEY,
+    GOOGLE_MAPS_MAP_ID,
     DEFAULT_POLYLINE_COLOR,
     PLANNER_POLYLINE_COLOR
 } from '../constants';
@@ -17,6 +18,7 @@ import { fetchLocationImage } from './image.service';
 import { generatePlaceholderImage } from '../utils/transport.utils';
 
 let googleMapsScriptPromise: Promise<void> | null = null;
+let globalFetchedMapId: string | null = null;
 
 /**
  * Dynamically loads the Google Maps JavaScript API script if not already present
@@ -40,16 +42,18 @@ export function loadGoogleMapsScript(): Promise<void> {
         }
 
         let keyToUse = GOOGLE_MAPS_API_KEY;
-        if (!keyToUse) {
-            try {
-                const bffRes = await fetch('https://pages-bff.vercel.app/api/maps/config');
-                const data = await bffRes.json();
-                if (data?.mapsApiKey) {
-                    keyToUse = data.mapsApiKey;
-                }
-            } catch (err) {
-                console.warn('BFF maps config fetch failed, using fallback key if any', err);
+        // Always try to fetch from BFF to get latest config and mapId
+        try {
+            const bffRes = await fetch('https://pages-bff.vercel.app/api/maps/config');
+            const data = await bffRes.json();
+            if (data?.mapsApiKey) {
+                keyToUse = data.mapsApiKey;
             }
+            if (data?.mapId) {
+                globalFetchedMapId = data.mapId;
+            }
+        } catch (err) {
+            console.warn('BFF maps config fetch failed, using fallback key if any', err);
         }
 
         if (!keyToUse) {
@@ -188,6 +192,7 @@ export class MapService {
 
     private initializeMap(container: HTMLElement): google.maps.Map {
         const mapOptions: google.maps.MapOptions = {
+            mapId: globalFetchedMapId || GOOGLE_MAPS_MAP_ID,
             center: DEFAULT_MAP_OPTIONS.center,
             zoom: DEFAULT_MAP_OPTIONS.zoom,
             mapTypeId: google.maps.MapTypeId.TERRAIN,
