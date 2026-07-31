@@ -25,7 +25,8 @@ export function setupMapsNetworkInterceptor() {
         urlStr.includes('/maps-api-v3/') ||
         urlStr.includes('gstatic.com') ||
         urlStr.includes('$rpc') ||
-        urlStr.includes('gen_204')
+        urlStr.includes('gen_204') ||
+        urlStr.includes('/mapsjs/')
       ) {
         return originalFetch.call(this, input, init);
       }
@@ -82,7 +83,8 @@ export function setupMapsNetworkInterceptor() {
         urlStr.includes('/maps-api-v3/') ||
         urlStr.includes('gstatic.com') ||
         urlStr.includes('$rpc') ||
-        urlStr.includes('gen_204')
+        urlStr.includes('gen_204') ||
+        urlStr.includes('/mapsjs/')
       ) {
         return originalOpen.call(this, method, url, async, username, password);
       }
