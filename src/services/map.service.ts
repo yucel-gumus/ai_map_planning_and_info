@@ -41,9 +41,13 @@ export function loadGoogleMapsScript(): Promise<void> {
         }
 
         let keyToUse = GOOGLE_MAPS_API_KEY;
-        // Always try to fetch from BFF to get latest config and mapId
+        // Fetch from backend to get latest config and mapId
         try {
-            const bffRes = await fetch('https://pages-bff.vercel.app/api/maps/config');
+            const configBase = (
+                (import.meta.env.VITE_API_URL as string | undefined) ||
+                (import.meta.env.PROD ? 'https://api.yucelgumus.dev' : '')
+            ).replace(/\/$/, '');
+            const bffRes = await fetch(`${configBase}/api/maps/config`);
             const data = await bffRes.json();
             if (data?.mapsApiKey) {
                 keyToUse = data.mapsApiKey;

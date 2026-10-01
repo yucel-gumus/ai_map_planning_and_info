@@ -4,7 +4,7 @@ const gatewayBase = (): string => {
   const url =
     process.env.AI_API_URL ||
     process.env.GEMINI_GATEWAY_URL ||
-    'https://python-backend-270384591051.europe-west3.run.app';
+    'https://api.yucelgumus.dev';
   return url.replace(/\/$/, '');
 };
 

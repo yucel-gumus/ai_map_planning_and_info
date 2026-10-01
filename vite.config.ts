@@ -6,7 +6,7 @@ export default defineConfig(({ mode }) => {
   const gatewayTarget = (
     env.AI_API_URL ||
     env.GEMINI_GATEWAY_URL ||
-    'https://python-backend-270384591051.europe-west3.run.app'
+    (mode === 'development' ? 'http://127.0.0.1:8000' : 'https://api.yucelgumus.dev')
   ).replace(/\/$/, '');
 
   const apiKey = env.GATEWAY_CLIENT_API_KEY || env.CLIENT_API_KEY || '';
@@ -32,20 +32,20 @@ export default defineConfig(({ mode }) => {
         '/api/generate-map': {
           target: gatewayTarget,
           changeOrigin: true,
-          secure: true,
+          secure: false,
           configure: withGatewayAuth,
         },
         // Places photo + future Google Maps backend endpoints
         '/api/places': {
           target: gatewayTarget,
           changeOrigin: true,
-          secure: true,
+          secure: false,
           configure: withGatewayAuth,
         },
         '/api/maps': {
           target: gatewayTarget,
           changeOrigin: true,
-          secure: true,
+          secure: false,
           configure: withGatewayAuth,
         },
       },
