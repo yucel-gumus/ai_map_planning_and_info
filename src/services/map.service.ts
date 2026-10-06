@@ -45,7 +45,7 @@ export function loadGoogleMapsScript(): Promise<void> {
         try {
             const configBase = (
                 (import.meta.env.VITE_API_URL as string | undefined) ||
-                (import.meta.env.PROD ? 'https://api.yucelgumus.dev' : '')
+                (import.meta.env.PROD ? 'https://python-backend-270384591051.europe-west3.run.app' : '')
             ).replace(/\/$/, '');
             const bffRes = await fetch(`${configBase}/api/maps/config`);
             const data = await bffRes.json();

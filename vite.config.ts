@@ -6,7 +6,7 @@ export default defineConfig(({ mode }) => {
   const gatewayTarget = (
     env.AI_API_URL ||
     env.GEMINI_GATEWAY_URL ||
-    (mode === 'development' ? 'http://127.0.0.1:8000' : 'https://api.yucelgumus.dev')
+    (mode === 'development' ? 'http://127.0.0.1:8000' : 'https://python-backend-270384591051.europe-west3.run.app')
   ).replace(/\/$/, '');
 
   const apiKey = env.GATEWAY_CLIENT_API_KEY || env.CLIENT_API_KEY || '';
