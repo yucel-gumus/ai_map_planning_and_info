@@ -64,8 +64,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
   }
 
-  // Default: resolve upstream once, stream bytes to client
-  const params = new URLSearchParams({ name });
+  // Stream image bytes straight from the gateway (single hop; the gateway hides
+  // the keyed Google URL and returns image/* directly with mode=image, which is
+  // also its default). This proxy never lets a keyed URL reach the browser.
+  const params = new URLSearchParams({ name, mode: 'image' });
   if (lat) params.set('lat', lat);
   if (lng) params.set('lng', lng);
 
@@ -74,47 +76,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       method: 'GET',
       headers: {
         'X-API-Key': key,
-        Accept: 'application/json',
       },
     });
-
-    const text = await upstream.text();
-    let data: { success?: boolean; url?: string | null; detail?: string } = {};
-    try {
-      data = JSON.parse(text);
-    } catch {
-      return res.status(502).json({ detail: 'Invalid upstream response' });
-    }
 
     if (!upstream.ok) {
       // Do not forward upstream bodies that might include sensitive URLs
       return res.status(upstream.status).json({
         success: false,
-        detail: typeof data?.detail === 'string' ? data.detail : 'Upstream photo lookup failed',
+        detail: 'Upstream photo lookup failed',
       });
     }
 
-    const photoUrl = data?.url;
-    if (!photoUrl) {
+    const contentType = upstream.headers.get('content-type') || '';
+    // Reject accidental HTML/JSON error pages; only stream real image bytes
+    if (!contentType.startsWith('image/') && !contentType.includes('octet-stream')) {
       return res.status(404).json({ success: false, detail: 'No photo found' });
     }
 
-    // Server-side only: fetch Google URL (may contain key) and stream opaque bytes
-    const imgRes = await fetch(photoUrl);
-    if (!imgRes.ok) {
-      return res.status(502).json({ detail: 'Photo fetch failed' });
-    }
-
-    const contentType = imgRes.headers.get('content-type') || 'image/jpeg';
-    // Reject accidental HTML/JSON error pages from Google
-    if (!contentType.startsWith('image/') && !contentType.includes('octet-stream')) {
-      return res.status(502).json({ detail: 'Upstream did not return an image' });
-    }
-
-    const buffer = Buffer.from(await imgRes.arrayBuffer());
+    const buffer = Buffer.from(await upstream.arrayBuffer());
     res.setHeader('Content-Type', contentType);
     res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=86400');
-    // Prevent third-party embedding of our billed proxy if desired (same-origin imgs still work)
     res.setHeader('X-Content-Type-Options', 'nosniff');
     return res.status(200).send(buffer);
   } catch {
