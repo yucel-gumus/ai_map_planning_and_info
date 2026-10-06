@@ -47,7 +47,10 @@ export function loadGoogleMapsScript(): Promise<void> {
                 (import.meta.env.VITE_API_URL as string | undefined) ||
                 (import.meta.env.PROD ? 'https://python-backend-270384591051.europe-west3.run.app' : '')
             ).replace(/\/$/, '');
-            const bffRes = await fetch(`${configBase}/api/maps/config`);
+            const clientApiKey = (import.meta.env.VITE_API_KEY as string | undefined) || '';
+            const bffRes = await fetch(`${configBase}/api/maps/config`, {
+                headers: clientApiKey ? { 'X-API-Key': clientApiKey } : undefined,
+            });
             const data = await bffRes.json();
             if (data?.mapsApiKey) {
                 keyToUse = data.mapsApiKey;
