@@ -1,53 +1,62 @@
 /**
- * CSS Variables (60-30-10 Rule Design System)
- * @description Exclusively 3 colors: #FFEBD3, #FFB6A6, #9BCEC1
+ * CSS Variables (60-30-10 İpek Küllü Arduvaz Design System)
+ * @description Exclusively 10-hex scale: #F5F9F5, #EDF3EE, #DBE6DD, #DCE3EA, #BCC7D2, #3E5164, #253341, #F2A488, #EC7D55, #AB421C
  */
 
 :root {
-    /* STRICT 60-30-10 COLOR PALETTE (Rich & Solid Tones) */
-    /* 60% Dominant (Warm Rich Sand) */
-    --color-dominant: #F5E1C8;
-    --color-dominant-rgb: 245, 225, 200;
-    
-    /* 30% Secondary (Deep Coral / Warm Terracotta) */
-    --color-secondary: #E28B7B;
-    --color-secondary-rgb: 226, 139, 123;
-    
-    /* 10% Accent (Vibrant Deep Sage / Teal) */
-    --color-accent: #4F9D88;
-    --color-accent-rgb: 79, 157, 136;
+    /* STRICT 60-30-10 COLOR PALETTE (İpek Küllü Arduvaz) */
+    /* 60% Dominant (Açık Sis Yeşili) */
+    --color-mist-light: #F5F9F5;
+    --color-mist: #EDF3EE;
+    --color-mist-hover: #DBE6DD;
+    --color-dominant: #EDF3EE;
+    --color-dominant-rgb: 237, 243, 238;
+
+    /* 30% Secondary (Küllü Arduvaz) */
+    --color-slate-surface: #DCE3EA;
+    --color-slate-border: #BCC7D2;
+    --color-slate-muted: #3E5164;
+    --color-slate-ink: #253341;
+    --color-secondary: #DCE3EA;
+    --color-secondary-rgb: 220, 227, 234;
+
+    /* 10% Accent (Kiremit-Mercan) */
+    --color-accent-soft: #F2A488;
+    --color-accent: #EC7D55;
+    --color-accent-hover: #AB421C;
+    --color-accent-rgb: 236, 125, 85;
 
     /* Semantic Token Mappings */
-    --color-bg: var(--color-dominant);
-    --color-surface: var(--color-dominant);
-    --color-card-bg: var(--color-secondary);
-    --color-card-border: var(--color-accent);
-    
-    --color-text-primary: #3B211C; /* Dark rich mocha for high contrast readability */
-    --color-text-heading: #193630; /* Deep forest teal for prominent titles */
-    --color-text-light: #58322B;
+    --color-bg: var(--color-mist);
+    --color-surface: var(--color-mist-light);
+    --color-card-bg: var(--color-slate-surface);
+    --color-card-border: var(--color-slate-border);
+
+    --color-text-primary: #253341;
+    --color-text-heading: #253341;
+    --color-text-light: #3E5164;
 
     --color-primary: var(--color-accent);
-    --color-primary-dark: #2E6C5C;
-    --color-primary-light: rgba(79, 157, 136, 0.4);
+    --color-primary-dark: #AB421C;
+    --color-primary-light: rgba(242, 164, 136, 0.35);
 
-    --color-white: #F5E1C8;
-    --color-black: #193630;
-    --color-gray-50: #EDD6BC;
-    --color-gray-100: #EAB4AA;
-    --color-gray-200: #E28B7B;
-    --color-gray-300: var(--color-secondary);
-    --color-gray-400: #C96D5E;
-    --color-gray-500: #58322B;
-    --color-gray-600: #3B211C;
-    --color-gray-700: #2E1814;
-    --color-gray-800: #22110E;
-    --color-gray-900: #193630;
+    --color-white: #F5F9F5;
+    --color-black: #253341;
+    --color-gray-50: #F5F9F5;
+    --color-gray-100: #EDF3EE;
+    --color-gray-200: #DBE6DD;
+    --color-gray-300: #DCE3EA;
+    --color-gray-400: #BCC7D2;
+    --color-gray-500: #3E5164;
+    --color-gray-600: #3E5164;
+    --color-gray-700: #253341;
+    --color-gray-800: #253341;
+    --color-gray-900: #253341;
 
     /* Status mapped to palette */
-    --color-error: var(--color-secondary);
+    --color-error: var(--color-accent-hover);
     --color-success: var(--color-accent);
-    --color-warning: var(--color-secondary);
+    --color-warning: var(--color-accent-soft);
 
     /* Typography */
     --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -87,12 +96,12 @@
     --radius-full: 50%;
     --radius-pill: 9999px;
 
-    /* Shadows (Warm Tinted Shadows) */
-    --shadow-sm: 0 4px 12px rgba(90, 50, 44, 0.08);
-    --shadow-md: 0 8px 24px rgba(90, 50, 44, 0.12);
-    --shadow-lg: 0 14px 36px rgba(90, 50, 44, 0.16);
-    --shadow-xl: 0 20px 48px rgba(90, 50, 44, 0.22);
-    --shadow-accent: 0 10px 30px rgba(155, 206, 193, 0.4);
+    /* Shadows (Slate Ink Tinted Shadows) */
+    --shadow-sm: 0 4px 12px rgba(37, 51, 65, 0.08);
+    --shadow-md: 0 8px 24px rgba(37, 51, 65, 0.12);
+    --shadow-lg: 0 14px 36px rgba(37, 51, 65, 0.16);
+    --shadow-xl: 0 20px 48px rgba(37, 51, 65, 0.22);
+    --shadow-accent: 0 10px 30px rgba(236, 125, 85, 0.35);
 
     /* Transitions & Motion */
     --transition-fast: 0.18s cubic-bezier(0.4, 0, 0.2, 1);

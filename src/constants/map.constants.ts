@@ -74,12 +74,12 @@ export const TILE_LAYER_ATTRIBUTION = TILE_LAYERS.googleHybrid.attribution;
 /**
  * Genel mod için polyline rengi
  */
-export const DEFAULT_POLYLINE_COLOR = '#FFB6A6';
+export const DEFAULT_POLYLINE_COLOR = '#253341';
 
 /**
  * Planner mod için polyline rengi
  */
-export const PLANNER_POLYLINE_COLOR = '#9BCEC1';
+export const PLANNER_POLYLINE_COLOR = '#EC7D55';
 
 /**
  * Polyline options

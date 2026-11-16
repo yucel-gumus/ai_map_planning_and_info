@@ -54,7 +54,7 @@ export function generatePrintableHtml(itinerary: Location[], lines: Line[]): str
         `;
 
         items.forEach((item, idx) => {
-            const imgStyle = item.imageUrl ? `background-image: url('${item.imageUrl}')` : 'background-color: #E28B7B';
+            const imgStyle = item.imageUrl ? `background-image: url('${item.imageUrl}')` : 'background-color: #DCE3EA';
             daysHtml += `
             <div class="pdf-card">
               <div class="pdf-card-img" style="${imgStyle}"></div>
@@ -109,20 +109,21 @@ export function generatePrintableHtml(itinerary: Location[], lines: Line[]): str
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
     
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-    body { background-color: #F8ECE0; color: #193630; padding: 40px; }
+    body { background-color: #EDF3EE; color: #253341; padding: 40px; }
     
     .guide-header {
-      background: linear-gradient(135deg, #E28B7B, #4F9D88);
+      background: linear-gradient(135deg, #DCE3EA, #DBE6DD);
       padding: 32px;
       border-radius: 20px;
       margin-bottom: 32px;
-      color: #193630;
-      box-shadow: 0 10px 30px rgba(45, 25, 20, 0.2);
-      border: 3px solid #193630;
+      color: #253341;
+      box-shadow: 0 10px 30px rgba(37, 51, 65, 0.14);
+      border: 3px solid #BCC7D2;
+      border-left: 8px solid #EC7D55;
     }
 
-    .guide-header h1 { font-size: 32px; font-weight: 800; margin-bottom: 8px; }
-    .guide-header p { font-size: 15px; opacity: 0.95; font-weight: 600; }
+    .guide-header h1 { font-size: 32px; font-weight: 800; margin-bottom: 8px; color: #253341; }
+    .guide-header p { font-size: 15px; opacity: 0.95; font-weight: 600; color: #3E5164; }
 
     .stats-row {
       display: flex;
@@ -131,8 +132,8 @@ export function generatePrintableHtml(itinerary: Location[], lines: Line[]): str
     }
 
     .stat-badge {
-      background: #193630;
-      color: #F5E1C8;
+      background: #253341;
+      color: #F5F9F5;
       padding: 6px 14px;
       border-radius: 20px;
       font-size: 12px;
@@ -142,12 +143,15 @@ export function generatePrintableHtml(itinerary: Location[], lines: Line[]): str
       gap: 6px;
     }
 
+    .stat-badge i { color: #F2A488; }
+
     .day-section { margin-bottom: 40px; page-break-inside: avoid; }
     .day-title {
       font-size: 20px;
       font-weight: 800;
-      background: #193630;
-      color: #F5E1C8;
+      background: #253341;
+      color: #F5F9F5;
+      border-left: 5px solid #EC7D55;
       display: inline-block;
       padding: 8px 20px;
       border-radius: 14px;
@@ -157,11 +161,11 @@ export function generatePrintableHtml(itinerary: Location[], lines: Line[]): str
     .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
     
     .pdf-card {
-      background: #FFFFFF;
-      border: 2px solid #4F9D88;
+      background: #F5F9F5;
+      border: 2px solid #BCC7D2;
       border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+      box-shadow: 0 4px 14px rgba(37, 51, 65, 0.08);
       display: flex;
       flex-direction: column;
     }
@@ -171,29 +175,31 @@ export function generatePrintableHtml(itinerary: Location[], lines: Line[]): str
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      border-bottom: 2px solid #4F9D88;
+      border-bottom: 2px solid #BCC7D2;
     }
 
     .pdf-card-body { padding: 18px; flex: 1; display: flex; flex-direction: column; }
-    .pdf-card-title { font-size: 17px; font-weight: 800; color: #193630; margin-bottom: 6px; }
-    .pdf-card-meta { font-size: 12px; font-weight: 800; color: #193630; margin-bottom: 10px; display: flex; gap: 12px; background: rgba(79,157,136,0.3); padding: 4px 10px; border-radius: 8px; width: fit-content; }
-    .pdf-card-desc { font-size: 13px; line-height: 1.5; color: #3B211C; margin-bottom: 12px; flex: 1; }
-    .pdf-card-coords { font-size: 11px; font-weight: 700; color: #193630; opacity: 0.8; }
+    .pdf-card-title { font-size: 17px; font-weight: 800; color: #253341; margin-bottom: 6px; }
+    .pdf-card-meta { font-size: 12px; font-weight: 800; color: #253341; margin-bottom: 10px; display: flex; gap: 12px; background: #DBE6DD; border: 1px solid #BCC7D2; padding: 4px 10px; border-radius: 8px; width: fit-content; }
+    .pdf-card-desc { font-size: 13px; line-height: 1.5; color: #3E5164; margin-bottom: 12px; flex: 1; }
+    .pdf-card-coords { font-size: 11px; font-weight: 700; color: #3E5164; }
 
     .transport-bar {
       grid-column: 1 / -1;
-      background: rgba(226, 139, 123, 0.25);
-      border: 2px dashed #E28B7B;
+      background: rgba(242, 164, 136, 0.25);
+      border: 2px dashed #EC7D55;
       padding: 10px 18px;
       border-radius: 12px;
       margin: 4px 0 12px 0;
       font-size: 13px;
       font-weight: 700;
-      color: #193630;
+      color: #253341;
       display: flex;
       align-items: center;
       gap: 10px;
     }
+
+    .transport-bar i { color: #AB421C; }
 
     .no-print-bar {
       position: fixed;
@@ -205,25 +211,29 @@ export function generatePrintableHtml(itinerary: Location[], lines: Line[]): str
     }
 
     .btn-print {
-      background: #193630;
-      color: #F5E1C8;
-      border: 2px solid #F5E1C8;
+      background: #EC7D55;
+      color: #253341;
+      border: 2px solid #AB421C;
       padding: 12px 24px;
       border-radius: 30px;
       font-size: 14px;
       font-weight: 800;
       cursor: pointer;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      box-shadow: 0 6px 20px rgba(37, 51, 65, 0.25);
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      transition: transform 0.2s;
+      transition: transform 0.2s, background-color 0.2s, color 0.2s;
     }
 
-    .btn-print:hover { transform: scale(1.05); }
+    .btn-print:hover {
+      background: #AB421C;
+      color: #F5F9F5;
+      transform: scale(1.05);
+    }
 
     @media print {
-      body { padding: 0; background: #fff; }
+      body { padding: 0; background: #F5F9F5; }
       .no-print-bar { display: none !important; }
       .pdf-card { break-inside: avoid; }
     }

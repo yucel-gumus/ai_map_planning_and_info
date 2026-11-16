@@ -92,9 +92,9 @@ export function loadGoogleMapsScript(): Promise<void> {
  */
 function createMarkerSvgIcon(sequence?: number): string {
     const text = sequence !== undefined && sequence !== null ? String(sequence) : '●';
-    const bg = '#4F9D88';
-    const border = '#E28B7B';
-    const textColor = '#F5E1C8';
+    const bg = '#EC7D55';
+    const border = '#253341';
+    const textColor = '#253341';
 
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44">
   <circle cx="22" cy="22" r="18" fill="${bg}" stroke="${border}" stroke-width="3" />
@@ -502,8 +502,8 @@ export class MapService {
         const labelText = labelParts.join(' · ');
 
         const labelSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="28">
-  <rect x="1" y="1" rx="10" ry="10" width="198" height="26" fill="#193630" stroke="#4F9D88" stroke-width="2" opacity="0.92"/>
-  <text x="100" y="18" text-anchor="middle" font-family="Plus Jakarta Sans, Arial, sans-serif" font-size="11" font-weight="700" fill="#F5E1C8">${escapeHtml(labelText).slice(0, 40)}</text>
+  <rect x="1" y="1" rx="10" ry="10" width="198" height="26" fill="#253341" stroke="#EC7D55" stroke-width="2" opacity="0.94"/>
+  <text x="100" y="18" text-anchor="middle" font-family="Plus Jakarta Sans, Arial, sans-serif" font-size="11" font-weight="700" fill="#F5F9F5">${escapeHtml(labelText).slice(0, 40)}</text>
 </svg>`;
 
         const labelMarker = new google.maps.Marker({

@@ -19,9 +19,9 @@ export function generatePlaceholderImage(locationName: string): string {
     }
 
     const isEven = Math.abs(hash) % 2 === 0;
-    const bgFill = isEven ? '#E28B7B' : '#4F9D88';
-    const circleFill = isEven ? '#4F9D88' : '#E28B7B';
-    const textFill = '#F5E1C8';
+    const bgFill = isEven ? '#DCE3EA' : '#3E5164';
+    const circleFill = isEven ? '#EC7D55' : '#F2A488';
+    const textFill = isEven ? '#253341' : '#F5F9F5';
 
     const letter = locationName.charAt(0).toUpperCase() || '?';
 

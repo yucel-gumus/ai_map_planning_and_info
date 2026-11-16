@@ -31,8 +31,8 @@
     scrollbar-width: none;
     padding: var(--spacing-lg);
     border-radius: var(--radius-2xl);
-    background-color: var(--color-dominant);
-    border: 3px solid var(--color-secondary);
+    background-color: var(--color-slate-surface);
+    border: 2px solid var(--color-slate-border);
     box-shadow: var(--shadow-xl);
     position: relative;
 }
@@ -45,14 +45,14 @@
 .location-card {
     flex: 0 0 auto;
     width: 240px;
-    background-color: var(--color-dominant);
+    background-color: var(--color-mist-light);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-md);
     overflow: hidden;
     cursor: pointer;
     transition: all var(--transition-spring);
     position: relative;
-    border: 2px solid var(--color-secondary);
+    border: 2px solid var(--color-slate-border);
 }
 
 .location-card:hover {
@@ -63,9 +63,9 @@
 
 .card-active {
     border: 3px solid var(--color-accent) !important;
-    box-shadow: var(--shadow-xl), 0 0 0 4px rgba(79, 157, 136, 0.6) !important;
+    box-shadow: var(--shadow-xl), 0 0 0 4px rgba(236, 125, 85, 0.35) !important;
     transform: translateY(-4px) scale(1.03);
-    background-color: var(--color-dominant) !important;
+    background-color: var(--color-mist-light) !important;
 }
 
 .card-status-visited {
@@ -80,13 +80,13 @@
 /* Card Image Frame */
 .card-image {
     height: 130px;
-    background-color: var(--color-secondary);
+    background-color: var(--color-slate-surface);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
     transition: transform var(--transition-normal), filter 0.4s ease;
-    border-bottom: 2px solid var(--color-secondary);
+    border-bottom: 2px solid var(--color-slate-border);
     overflow: hidden;
 }
 
@@ -115,7 +115,7 @@
     left: 0;
     right: 0;
     height: 40%;
-    background: linear-gradient(to top, var(--color-dominant), transparent);
+    background: linear-gradient(to top, var(--color-mist-light), transparent);
     pointer-events: none;
 }
 
@@ -128,8 +128,8 @@
     height: 34px;
     border-radius: 999px;
     border: 1.5px solid var(--color-accent);
-    background: rgba(25, 54, 48, 0.88);
-    color: var(--color-accent);
+    background: rgba(37, 51, 65, 0.88);
+    color: var(--color-mist-light);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -141,21 +141,21 @@
 
 .card-streetview-btn:hover {
     background: var(--color-accent);
-    color: var(--color-dominant);
+    color: var(--color-slate-ink);
     transform: scale(1.08);
 }
 
 /* Card Body Content (High Contrast Text) */
 .card-content {
     padding: var(--spacing-md) var(--spacing-lg);
-    background-color: var(--color-dominant);
+    background-color: var(--color-mist-light);
 }
 
 .card-title {
     font-size: var(--font-size-md);
     font-weight: var(--font-weight-extra-bold);
     margin-bottom: var(--spacing-xs);
-    color: var(--color-text-heading);
+    color: var(--color-slate-ink);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -164,7 +164,7 @@
 
 .card-description {
     font-size: var(--font-size-sm);
-    color: var(--color-text-primary);
+    color: var(--color-slate-muted);
     line-height: 1.4;
     margin-bottom: var(--spacing-sm);
     overflow: hidden;
@@ -177,7 +177,7 @@
 
 .card-coordinates {
     font-size: var(--font-size-xs);
-    color: var(--color-gray-500);
+    color: var(--color-slate-muted);
     font-weight: var(--font-weight-semibold);
     letter-spacing: 0.3px;
     margin-top: 4px;
@@ -192,30 +192,30 @@
     position: absolute;
     top: 12px;
     left: 46px;
-    background-color: var(--color-secondary);
-    color: var(--color-dominant);
+    background-color: var(--color-slate-ink);
+    color: var(--color-mist-light);
     padding: 3px 9px;
     border-radius: var(--radius-pill);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-extra-bold);
     z-index: 2;
     box-shadow: var(--shadow-sm);
-    border: 1.5px solid var(--color-dominant);
+    border: 1.5px solid var(--color-mist-light);
 }
 
 .card-time-badge {
     position: absolute;
     top: 12px;
     right: 12px;
-    background-color: var(--color-accent);
-    color: var(--color-text-heading);
+    background-color: var(--color-mist-hover);
+    color: var(--color-slate-ink);
     padding: 4px 10px;
     border-radius: var(--radius-pill);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-extra-bold);
     z-index: 2;
     box-shadow: var(--shadow-sm);
-    border: 2px solid var(--color-dominant);
+    border: 2px solid var(--color-slate-border);
 }
 
 .card-sequence-badge {
@@ -223,7 +223,7 @@
     top: 12px;
     left: 12px;
     background-color: var(--color-accent);
-    color: var(--color-text-heading);
+    color: var(--color-slate-ink);
     width: 28px;
     height: 28px;
     border-radius: var(--radius-full);
@@ -234,15 +234,16 @@
     font-weight: var(--font-weight-extra-bold);
     z-index: 2;
     box-shadow: var(--shadow-sm);
-    border: 2px solid var(--color-dominant);
+    border: 2px solid var(--color-mist-light);
 }
 
 .card-duration {
     display: inline-block;
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-bold);
-    color: var(--color-text-heading);
-    background-color: var(--color-accent);
+    color: var(--color-slate-ink);
+    background-color: var(--color-mist-hover);
+    border: 1px solid var(--color-slate-border);
     padding: 3px 8px;
     border-radius: var(--radius-sm);
     margin-bottom: var(--spacing-xs);
@@ -267,24 +268,24 @@
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-bold);
     cursor: pointer;
-    border: 1px solid var(--color-secondary);
-    background-color: transparent;
-    color: var(--color-text-heading);
+    border: 1px solid var(--color-slate-border);
+    background-color: var(--color-mist);
+    color: var(--color-slate-ink);
     transition: all var(--transition-fast);
 }
 
 .card-action-btn.btn-visited:hover,
 .card-action-btn.btn-visited.is-active {
     background-color: var(--color-accent);
-    border-color: var(--color-accent);
-    color: var(--color-text-heading);
+    border-color: var(--color-accent-hover);
+    color: var(--color-slate-ink);
 }
 
 .card-action-btn.btn-exclude:hover,
 .card-action-btn.btn-exclude.is-active {
-    background-color: var(--color-secondary);
-    border-color: var(--color-secondary);
-    color: var(--color-dominant);
+    background-color: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+    color: var(--color-mist-light);
 }
 
 /* Carousel Control Indicators */
@@ -296,8 +297,8 @@
 }
 
 .carousel-arrow {
-    background-color: var(--color-secondary);
-    border: 2px solid var(--color-accent);
+    background-color: var(--color-slate-surface);
+    border: 2px solid var(--color-slate-border);
     border-radius: var(--radius-full);
     width: 36px;
     height: 36px;
@@ -305,15 +306,15 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: var(--color-dominant);
+    color: var(--color-slate-ink);
     transition: all var(--transition-spring);
     box-shadow: var(--shadow-sm);
 }
 
 .carousel-arrow:hover {
     background-color: var(--color-accent);
-    color: var(--color-dominant);
-    border-color: var(--color-dominant);
+    color: var(--color-slate-ink);
+    border-color: var(--color-accent-hover);
     transform: scale(1.12);
 }
 
@@ -327,8 +328,8 @@
     width: 10px;
     height: 10px;
     border-radius: var(--radius-full);
-    background-color: var(--color-secondary);
-    border: 1px solid var(--color-accent);
+    background-color: var(--color-slate-border);
+    border: 1px solid var(--color-slate-muted);
     margin: 0 4px;
     transition: all var(--transition-normal);
 }
@@ -337,7 +338,7 @@
     width: 22px;
     border-radius: var(--radius-pill);
     background-color: var(--color-accent);
-    border-color: var(--color-dominant);
+    border-color: var(--color-accent-hover);
 }
 
 /* Responsive */

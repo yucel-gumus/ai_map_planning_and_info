@@ -18,37 +18,37 @@
 
 .export-button {
     background: var(--color-accent);
-    border: 2px solid var(--color-secondary);
+    border: 2px solid var(--color-accent-hover);
     cursor: pointer;
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-extra-bold);
-    color: var(--color-text-heading);
+    color: var(--color-slate-ink);
     display: flex;
     align-items: center;
     gap: 8px;
     padding: 10px 18px;
     border-radius: var(--radius-pill);
     transition: all var(--transition-spring);
-    box-shadow: 0 4px 14px rgba(45, 76, 68, 0.2);
+    box-shadow: 0 4px 14px rgba(37, 51, 65, 0.18);
 }
 
 .export-button:hover {
-    background-color: var(--color-secondary);
-    color: var(--color-dominant);
-    border-color: var(--color-dominant);
+    background-color: var(--color-accent-hover);
+    color: var(--color-mist-light);
+    border-color: var(--color-accent-hover);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(90, 50, 44, 0.3);
+    box-shadow: 0 6px 20px rgba(37, 51, 65, 0.28);
 }
 
 /* Re-Plan Action Bar */
 .timeline-replan-bar {
-    background: linear-gradient(135deg, var(--color-accent), #3C8B76);
+    background: var(--color-slate-surface);
     padding: 6px 12px;
     display: flex;
     align-items: center;
     border-radius: var(--radius-pill);
-    box-shadow: 0 4px 16px rgba(25, 54, 48, 0.3);
-    border: 2px solid var(--color-secondary);
+    box-shadow: 0 4px 16px rgba(37, 51, 65, 0.22);
+    border: 2px solid var(--color-slate-border);
     gap: var(--spacing-sm);
 }
 
@@ -58,13 +58,13 @@
 }
 
 .replan-badge {
-    background-color: var(--color-dominant);
-    color: var(--color-text-heading);
+    background-color: var(--color-mist-hover);
+    color: var(--color-slate-ink);
     padding: 5px 11px;
     border-radius: var(--radius-pill);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-extra-bold);
-    border: 1.5px solid var(--color-secondary);
+    border: 1.5px solid var(--color-slate-border);
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -72,13 +72,13 @@
 }
 
 .replan-badge i {
-    color: var(--color-secondary);
+    color: var(--color-accent-hover);
 }
 
 .btn-replan-action {
-    background-color: var(--color-text-heading);
-    color: var(--color-dominant);
-    border: 2px solid var(--color-dominant);
+    background-color: var(--color-accent);
+    color: var(--color-slate-ink);
+    border: 2px solid var(--color-accent-hover);
     padding: 8px 16px;
     border-radius: var(--radius-pill);
     font-size: var(--font-size-xs);
@@ -88,23 +88,23 @@
     align-items: center;
     gap: 6px;
     transition: all var(--transition-spring);
-    box-shadow: 0 4px 14px rgba(45, 76, 68, 0.35);
+    box-shadow: 0 4px 14px rgba(37, 51, 65, 0.22);
     letter-spacing: -0.2px;
 }
 
 .btn-replan-action i {
-    color: var(--color-accent);
+    color: var(--color-slate-ink);
     font-size: 13px;
 }
 
 .btn-replan-action:hover {
-    background-color: var(--color-secondary);
-    color: var(--color-dominant);
-    border-color: var(--color-dominant);
+    background-color: var(--color-accent-hover);
+    color: var(--color-mist-light);
+    border-color: var(--color-accent-hover);
     transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 6px 20px rgba(255, 182, 166, 0.45);
+    box-shadow: 0 6px 20px rgba(236, 125, 85, 0.4);
 }
 
 .btn-replan-action:hover i {
-    color: var(--color-dominant);
+    color: var(--color-mist-light);
 }

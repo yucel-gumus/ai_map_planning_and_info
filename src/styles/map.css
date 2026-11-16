@@ -5,7 +5,7 @@
 
 /* Map Container */
 .map-container {
-    color: var(--color-dominant);
+    color: var(--color-slate-ink);
     position: absolute;
     top: 0;
     left: 0;
@@ -14,7 +14,7 @@
     transition: width var(--transition-normal), left var(--transition-normal);
     overflow: hidden;
     z-index: var(--z-map);
-    background-color: var(--color-dominant);
+    background-color: var(--color-mist);
 }
 
 .map-container-shifted {
@@ -26,7 +26,7 @@
     height: 100%;
     width: 100%;
     z-index: var(--z-map);
-    background-color: var(--color-dominant);
+    background-color: var(--color-mist);
 }
 
 /* Map Overlay Backdrop */
@@ -36,7 +36,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(25, 54, 48, 0.65);
+    background-color: rgba(37, 51, 65, 0.55);
     backdrop-filter: blur(6px);
     z-index: var(--z-overlay);
     display: none;
@@ -48,21 +48,21 @@
 
 /* Google Maps InfoWindow Styling */
 .gm-style-iw {
-    background-color: var(--color-dominant) !important;
+    background-color: var(--color-mist-light) !important;
     border-radius: var(--radius-lg) !important;
     padding: 0 !important;
-    border: 2px solid var(--color-secondary) !important;
+    border: 2px solid var(--color-slate-border) !important;
     box-shadow: var(--shadow-xl) !important;
 }
 
 .gm-style-iw-c {
-    background-color: var(--color-dominant) !important;
+    background-color: var(--color-mist-light) !important;
     padding: 0 !important;
     border-radius: var(--radius-lg) !important;
 }
 
 .gm-style-iw-tc::after {
-    background-color: var(--color-dominant) !important;
+    background-color: var(--color-mist-light) !important;
 }
 
 .gm-style .gm-style-iw-d {
@@ -72,7 +72,7 @@
 /* Rich popup bubble with Places photo */
 .popup-bubble {
     padding: 0;
-    color: #2A3A38;
+    color: #253341;
     width: 260px;
     font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
     overflow: hidden;
@@ -84,17 +84,17 @@
     height: 120px;
     background-size: cover;
     background-position: center;
-    background-color: #193630;
-    border-bottom: 2px solid #4F9D88;
+    background-color: #DCE3EA;
+    border-bottom: 2px solid #BCC7D2;
 }
 
 .popup-photo-placeholder {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #F5E1C8;
+    background-color: #DBE6DD;
+    color: #3E5164;
     font-size: 28px;
-    opacity: 0.7;
 }
 
 .popup-body {
@@ -107,14 +107,14 @@
 .popup-title {
     font-size: 14px;
     font-weight: 800;
-    color: #193630;
+    color: #253341;
     line-height: 1.25;
 }
 
 .popup-desc {
     font-size: 12px;
     line-height: 1.4;
-    color: #2A3A38;
+    color: #3E5164;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -124,13 +124,13 @@
 .popup-time-info {
     font-size: 11px;
     font-weight: 600;
-    color: #4F9D88;
+    color: #AB421C;
 }
 
 .popup-rating {
     font-size: 12px;
     font-weight: 700;
-    color: #E28B7B;
+    color: #AB421C;
 }
 
 .popup-actions {
@@ -138,21 +138,21 @@
 }
 
 .btn-pano-trigger {
-    background: #193630;
-    color: #F5E1C8;
-    border: 1px solid #4F9D88;
+    background: #EC7D55;
+    color: #253341;
+    border: 1px solid #AB421C;
     padding: 6px 10px;
     border-radius: 8px;
     font-size: 11px;
     font-weight: 700;
     cursor: pointer;
     width: 100%;
-    transition: background 0.2s ease, transform 0.15s ease;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
 }
 
 .btn-pano-trigger:hover {
-    background: #4F9D88;
-    color: #193630;
+    background: #AB421C;
+    color: #F5F9F5;
     transform: translateY(-1px);
 }
 
