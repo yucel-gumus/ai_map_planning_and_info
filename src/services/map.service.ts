@@ -41,17 +41,22 @@ export function loadGoogleMapsScript(): Promise<void> {
         }
 
         let keyToUse = GOOGLE_MAPS_API_KEY;
-        // Fetch from backend to get latest config and mapId
+        // Fetch from same-origin BFF (or explicit VITE_API_URL override) to get latest config and mapId
         try {
-            const configBase = (
-                (import.meta.env.VITE_API_URL as string | undefined) ||
-                (import.meta.env.PROD ? 'https://python-backend-270384591051.europe-west3.run.app' : '')
-            ).replace(/\/$/, '');
-            const clientApiKey = (import.meta.env.VITE_API_KEY as string | undefined) || '';
-            const bffRes = await fetch(`${configBase}/api/maps/config`, {
-                headers: clientApiKey ? { 'X-API-Key': clientApiKey } : undefined,
-            });
-            const data = await bffRes.json();
+            const explicitBase = (import.meta.env.VITE_API_URL as string | undefined) || '';
+            const relBase = explicitBase ? explicitBase.replace(/\/$/, '') : '';
+            let data: { mapsApiKey?: string; mapId?: string } | null = null;
+
+            const primaryRes = await fetch(`${relBase}/api/maps/config`).catch(() => null);
+            const contentType = primaryRes?.headers.get('content-type') || '';
+            if (primaryRes && primaryRes.ok && contentType.includes('application/json')) {
+                data = await primaryRes.json();
+            } else if (!relBase) {
+                const fallbackRes = await fetch('https://python-backend-270384591051.europe-west3.run.app/api/maps/config').catch(() => null);
+                if (fallbackRes?.ok) {
+                    data = await fallbackRes.json();
+                }
+            }
             if (data?.mapsApiKey) {
                 keyToUse = data.mapsApiKey;
             }
@@ -59,7 +64,7 @@ export function loadGoogleMapsScript(): Promise<void> {
                 globalFetchedMapId = data.mapId;
             }
         } catch (err) {
-            console.warn('BFF maps config fetch failed, using fallback key if any', err);
+            console.warn('Maps config fetch failed, using fallback key if any', err);
         }
 
         if (!keyToUse) {

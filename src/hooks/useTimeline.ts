@@ -38,7 +38,7 @@ let elements: {
 function getElements() {
     if (!elements) {
         elements = {
-            timelineContainer: $<HTMLDivElement>('#timeline-container'),
+            timelineContainer: $<HTMLDivElement>('#planner-actions-bar') || $<HTMLDivElement>('#timeline-container'),
             timeline: $<HTMLDivElement>('#timeline'),
             mapContainer: $<HTMLDivElement>('#map-container'),
             mapOverlay: $<HTMLDivElement>('#map-overlay'),
